@@ -18,6 +18,7 @@ const navRoutes = require('./routes/nav');
 const portfolioReturnsRoutes = require('./routes/portfolioReturns');
 const hybridRoutes = require('./routes/hybrid');
 const exploreFundsRoutes = require('./routes/explore-funds');
+const fundHistoryRoutes = require('./routes/fund-history');
 const navSyncJob = require('./jobs/navSyncJob');
 
 const app = express();
@@ -39,13 +40,15 @@ app.use('/api/benchmark', benchmarkRoutes);
 app.use('/api/nav', navRoutes);
 app.use('/api/hybrid', hybridRoutes);
 app.use('/api/funds', exploreFundsRoutes);
+app.use('/api/fund-history', fundHistoryRoutes);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   
-  // Start NAV sync job (runs daily)
+  // Start NAV sync job — runs every 24 hours automatically
+  // AMFI publishes new NAVs daily after 8 PM IST
   if (process.env.ENABLE_NAV_SYNC !== 'false') {
-    navSyncJob.start(24); // Run every 24 hours
+    navSyncJob.start(24);
   }
 });

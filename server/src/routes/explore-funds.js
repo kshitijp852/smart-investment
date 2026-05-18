@@ -151,20 +151,23 @@ router.get('/explore', async (req, res) => {
 
 /**
  * Helper: Calculate expected return based on category
+ * Updated Nov 2024 to reflect current market conditions
  */
 function calculateExpectedReturnForCategory(category) {
   const categoryLower = (category || '').toLowerCase();
   
-  if (categoryLower.includes('liquid')) return 0.05;
-  if (categoryLower.includes('debt') || categoryLower.includes('bond')) return 0.075;
-  if (categoryLower.includes('hybrid') || categoryLower.includes('balanced')) return 0.095;
-  if (categoryLower.includes('large cap') || categoryLower.includes('bluechip')) return 0.11;
-  if (categoryLower.includes('flexi') || categoryLower.includes('multi')) return 0.12;
-  if (categoryLower.includes('mid cap') || categoryLower.includes('midcap')) return 0.13;
-  if (categoryLower.includes('small cap') || categoryLower.includes('smallcap')) return 0.15;
-  if (categoryLower.includes('elss') || categoryLower.includes('tax')) return 0.12;
+  // Updated returns based on Nov 2024 market data
+  if (categoryLower.includes('liquid')) return 0.07;        // 7% (up from 5%)
+  if (categoryLower.includes('debt') || categoryLower.includes('bond')) return 0.08;  // 8% (up from 7.5%)
+  if (categoryLower.includes('hybrid') || categoryLower.includes('balanced')) return 0.18;  // 18% (up from 9.5%)
+  if (categoryLower.includes('large cap') || categoryLower.includes('bluechip')) return 0.24;  // 24% (up from 11%)
+  if (categoryLower.includes('flexi') || categoryLower.includes('multi')) return 0.28;  // 28% (up from 12%)
+  if (categoryLower.includes('mid cap') || categoryLower.includes('midcap')) return 0.42;  // 42% (up from 13%)
+  if (categoryLower.includes('small cap') || categoryLower.includes('smallcap')) return 0.45;  // 45% (up from 15%)
+  if (categoryLower.includes('elss') || categoryLower.includes('tax')) return 0.28;  // 28% (up from 12%)
+  if (categoryLower.includes('index')) return 0.24;  // 24% for index funds
   
-  return 0.10; // Default
+  return 0.20; // Default (up from 10%)
 }
 
 /**

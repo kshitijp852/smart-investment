@@ -1,52 +1,18 @@
 {
-  "liquid": {
-    "min": 0.03,
-    "max": 0.06,
-    "description": "Liquid funds - Money market instruments"
-  },
-  "debt": {
-    "min": 0.06,
-    "max": 0.085,
-    "description": "Debt funds - Corporate bonds, G-Secs"
-  },
-  "balanced": {
-    "min": 0.08,
-    "max": 0.11,
-    "description": "Balanced/Hybrid funds - Mix of equity and debt"
-  },
-  "large_cap": {
-    "min": 0.09,
-    "max": 0.13,
-    "description": "Large cap equity funds"
-  },
-  "flexi_cap": {
-    "min": 0.10,
-    "max": 0.14,
-    "description": "Flexi cap / Multi cap funds"
-  },
-  "index": {
-    "min": 0.09,
-    "max": 0.12,
-    "description": "Index funds - Nifty 50, Sensex"
-  },
-  "elss": {
-    "min": 0.10,
-    "max": 0.14,
-    "description": "ELSS / Tax saver funds"
-  },
-  "mid_cap": {
-    "min": 0.11,
-    "max": 0.15,
-    "description": "Mid cap equity funds"
-  },
-  "small_cap": {
-    "min": 0.12,
-    "max": 0.18,
-    "description": "Small cap equity funds"
-  },
-  "default": {
-    "min": 0.05,
-    "max": 0.12,
-    "description": "Fallback for unknown categories"
-  }
+  "liquid": { "min": 0.04, "max": 0.07, "description": "Liquid funds - RBI repo rate linked" },
+  "debt": { "min": 0.06, "max": 0.09, "description": "Debt funds - Corporate bonds, G-Secs" },
+  "balanced": { "min": 0.09, "max": 0.13, "description": "Balanced/Hybrid funds" },
+  "hybrid_aggressive": { "min": 0.11, "max": 0.15, "description": "Aggressive Hybrid funds" },
+  "hybrid_conservative": { "min": 0.07, "max": 0.11, "description": "Conservative Hybrid funds" },
+  "large_cap": { "min": 0.10, "max": 0.16, "description": "Large cap - Nifty 50 long term avg 12-14%" },
+  "flexi_cap": { "min": 0.11, "max": 0.18, "description": "Flexi cap funds" },
+  "multi_cap": { "min": 0.11, "max": 0.18, "description": "Multi cap funds" },
+  "index": { "min": 0.10, "max": 0.15, "description": "Index funds - Nifty 50 historical avg" },
+  "elss": { "min": 0.11, "max": 0.18, "description": "ELSS Tax saver funds" },
+  "mid_cap": { "min": 0.13, "max": 0.22, "description": "Mid cap - higher risk, higher return" },
+  "small_cap": { "min": 0.14, "max": 0.26, "description": "Small cap - highest risk category" },
+  "large_and_midcap": { "min": 0.11, "max": 0.18, "description": "Large & Mid cap funds" },
+  "value": { "min": 0.10, "max": 0.16, "description": "Value funds" },
+  "contra": { "min": 0.10, "max": 0.15, "description": "Contra funds" },
+  "default": { "min": 0.08, "max": 0.14, "description": "Fallback for unknown categories" }
 }

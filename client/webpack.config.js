@@ -44,7 +44,7 @@ module.exports = (env, argv) => {
   ],
   devServer: {
     static: './dist',
-    port: 3000,
+    port: 8080,
     hot: true,
     historyApiFallback: true
   },
