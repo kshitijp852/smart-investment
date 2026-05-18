@@ -1,0 +1,162 @@
+<svg width="700" height="500" viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg" font-family="Arial,Helvetica,sans-serif">
+
+  <text x="350" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#111">Class Diagram — SmartInvest Backend</text>
+
+  <!-- ── Helper: class box macro ─────────────────────────────── -->
+  <!-- Each class: header rect (dark) + attrs rect + methods rect -->
+
+  <!-- ═══ BucketGenerator ═══ -->
+  <rect x="10" y="35" width="170" height="28" rx="3" fill="#2c5f8a"/>
+  <text x="95" y="54" text-anchor="middle" font-size="11" font-weight="bold" fill="white">BucketGenerator</text>
+  <rect x="10" y="63" width="170" height="42" fill="white" stroke="#2c5f8a" stroke-width="1"/>
+  <text x="18" y="79" font-size="9.5" fill="#333">- amount: Number</text>
+  <text x="18" y="91" font-size="9.5" fill="#333">- riskLevel: String</text>
+  <rect x="10" y="105" width="170" height="42" fill="#f5f8fc" stroke="#2c5f8a" stroke-width="1"/>
+  <text x="18" y="121" font-size="9.5" fill="#333">+ generateBucket(strategy)</text>
+  <text x="18" y="135" font-size="9.5" fill="#333">+ getTargetFundCount()</text>
+
+  <!-- ═══ FundScorer ═══ -->
+  <rect x="220" y="35" width="170" height="28" rx="3" fill="#2c5f8a"/>
+  <text x="305" y="54" text-anchor="middle" font-size="11" font-weight="bold" fill="white">FundScorer</text>
+  <rect x="220" y="63" width="170" height="30" fill="white" stroke="#2c5f8a" stroke-width="1"/>
+  <text x="228" y="82" font-size="9.5" fill="#333">- riskProfile: String</text>
+  <rect x="220" y="93" width="170" height="54" fill="#f5f8fc" stroke="#2c5f8a" stroke-width="1"/>
+  <text x="228" y="109" font-size="9.5" fill="#333">+ calculateFundScore()</text>
+  <text x="228" y="121" font-size="9.5" fill="#333">  metrics, categoryMetrics,</text>
+  <text x="228" y="133" font-size="9.5" fill="#333">  riskProfile → score</text>
+  <text x="228" y="145" font-size="9.5" fill="#333">+ normalize(val, min, max)</text>
+
+  <!-- ═══ AnalyticsEngine ═══ -->
+  <rect x="430" y="35" width="255" height="28" rx="3" fill="#2c5f8a"/>
+  <text x="557" y="54" text-anchor="middle" font-size="11" font-weight="bold" fill="white">AnalyticsEngine</text>
+  <rect x="430" y="63" width="255" height="14" fill="white" stroke="#2c5f8a" stroke-width="1"/>
+  <rect x="430" y="77" width="255" height="120" fill="#f5f8fc" stroke="#2c5f8a" stroke-width="1"/>
+  <text x="438" y="92" font-size="9.5" fill="#333">+ sharpeRatio(returns, rf)</text>
+  <text x="438" y="104" font-size="9.5" fill="#333">+ sortinoRatio(returns, rf)  [MAR corrected]</text>
+  <text x="438" y="116" font-size="9.5" fill="#333">+ beta(fundRet, marketRet)  [Bessel corrected]</text>
+  <text x="438" y="128" font-size="9.5" fill="#333">+ alpha(fundRet, marketRet, beta)</text>
+  <text x="438" y="140" font-size="9.5" fill="#333">+ informationRatio(fundRet, benchRet)</text>
+  <text x="438" y="152" font-size="9.5" fill="#333">+ standardDeviation(returns)</text>
+  <text x="438" y="164" font-size="9.5" fill="#333">+ recencyWeightedCAGR(history)</text>
+  <text x="438" y="176" font-size="9.5" fill="#333">+ treynorRatio(returns, beta)</text>
+
+  <!-- ═══ AttributionService ═══ -->
+  <rect x="10" y="210" width="200" height="28" rx="3" fill="#1a7a4a"/>
+  <text x="110" y="229" text-anchor="middle" font-size="11" font-weight="bold" fill="white">AttributionService</text>
+  <rect x="10" y="238" width="200" height="14" fill="white" stroke="#1a7a4a" stroke-width="1"/>
+  <rect x="10" y="252" width="200" height="90" fill="#f0faf5" stroke="#1a7a4a" stroke-width="1"/>
+  <text x="18" y="268" font-size="9.5" fill="#333">+ computePortfolioBeta(basket)</text>
+  <text x="18" y="280" font-size="9.5" fill="#333">+ computeJensensAlpha(Rp,Rm,β)</text>
+  <text x="18" y="292" font-size="9.5" fill="#333">+ computeRollingConsistency()</text>
+  <text x="18" y="304" font-size="9.5" fill="#333">+ computeBHBAttribution()</text>
+  <text x="18" y="316" font-size="9.5" fill="#333">+ computeFullReport(basket)</text>
+  <text x="18" y="328" font-size="9.5" fill="#333">  → {alpha, IR, bhb, rolling}</text>
+
+  <!-- ═══ BenchmarkService ═══ -->
+  <rect x="250" y="210" width="200" height="28" rx="3" fill="#1a7a4a"/>
+  <text x="350" y="229" text-anchor="middle" font-size="11" font-weight="bold" fill="white">BenchmarkService</text>
+  <rect x="250" y="238" width="200" height="28" fill="white" stroke="#1a7a4a" stroke-width="1"/>
+  <text x="258" y="251" font-size="9.5" fill="#333">- BENCHMARK_MAP: Object</text>
+  <text x="258" y="263" font-size="9.5" fill="#333">- SCHEME_CODES: Object</text>
+  <rect x="250" y="266" width="200" height="76" fill="#f0faf5" stroke="#1a7a4a" stroke-width="1"/>
+  <text x="258" y="282" font-size="9.5" fill="#333">+ fetchBenchmarkReturns(name)</text>
+  <text x="258" y="294" font-size="9.5" fill="#333">+ calculateBlendedBenchmark()</text>
+  <text x="258" y="306" font-size="9.5" fill="#333">+ compareWithBenchmark()</text>
+  <text x="258" y="318" font-size="9.5" fill="#333">+ calculateBasketReturns()</text>
+  <text x="258" y="330" font-size="9.5" fill="#333">+ generatePerformanceChart()</text>
+
+  <!-- ═══ MarketDataService ═══ -->
+  <rect x="490" y="210" width="200" height="28" rx="3" fill="#1a7a4a"/>
+  <text x="590" y="229" text-anchor="middle" font-size="11" font-weight="bold" fill="white">MarketDataService</text>
+  <rect x="490" y="238" width="200" height="14" fill="white" stroke="#1a7a4a" stroke-width="1"/>
+  <rect x="490" y="252" width="200" height="64" fill="#f0faf5" stroke="#1a7a4a" stroke-width="1"/>
+  <text x="498" y="268" font-size="9.5" fill="#333">+ getMarketReturns(months)</text>
+  <text x="498" y="280" font-size="9.5" fill="#333">+ fetchNifty50Returns(months)</text>
+  <text x="498" y="292" font-size="9.5" fill="#333">+ getNifty50ReturnsFromDB()</text>
+  <text x="498" y="304" font-size="9.5" fill="#333">+ getFallbackReturns(months)</text>
+
+  <!-- ═══ Data classes row ═══ -->
+  <!-- NAVRecord -->
+  <rect x="10" y="380" width="130" height="28" rx="3" fill="#555"/>
+  <text x="75" y="399" text-anchor="middle" font-size="10" font-weight="bold" fill="white">NAVRecord</text>
+  <rect x="10" y="408" width="130" height="52" fill="#f9f9f9" stroke="#555" stroke-width="1"/>
+  <text x="18" y="423" font-size="9" fill="#333">schemeCode: String</text>
+  <text x="18" y="435" font-size="9" fill="#333">date: Date</text>
+  <text x="18" y="447" font-size="9" fill="#333">nav: Number</text>
+  <text x="18" y="458" font-size="9" fill="#333">schemeName: String</text>
+
+  <!-- FundHistory -->
+  <rect x="160" y="380" width="140" height="28" rx="3" fill="#555"/>
+  <text x="230" y="399" text-anchor="middle" font-size="10" font-weight="bold" fill="white">FundHistory</text>
+  <rect x="160" y="408" width="140" height="52" fill="#f9f9f9" stroke="#555" stroke-width="1"/>
+  <text x="168" y="423" font-size="9" fill="#333">schemeCode: String</text>
+  <text x="168" y="435" font-size="9" fill="#333">priceHistory: Array</text>
+  <text x="168" y="447" font-size="9" fill="#333">metrics: Object</text>
+  <text x="168" y="458" font-size="9" fill="#333">status: String</text>
+
+  <!-- Portfolio -->
+  <rect x="320" y="380" width="140" height="28" rx="3" fill="#555"/>
+  <text x="390" y="399" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Portfolio</text>
+  <rect x="320" y="408" width="140" height="52" fill="#f9f9f9" stroke="#555" stroke-width="1"/>
+  <text x="328" y="423" font-size="9" fill="#333">userId: ObjectId</text>
+  <text x="328" y="435" font-size="9" fill="#333">items: Array</text>
+  <text x="328" y="447" font-size="9" fill="#333">createdAt: Date</text>
+  <text x="328" y="458" font-size="9" fill="#333">totalInvestment: Number</text>
+
+  <!-- Cache -->
+  <rect x="480" y="380" width="130" height="28" rx="3" fill="#555"/>
+  <text x="545" y="399" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Cache</text>
+  <rect x="480" y="408" width="130" height="52" fill="#f9f9f9" stroke="#555" stroke-width="1"/>
+  <text x="488" y="423" font-size="9" fill="#333">key: String</text>
+  <text x="488" y="435" font-size="9" fill="#333">data: Mixed</text>
+  <text x="488" y="447" font-size="9" fill="#333">timestamp: Date</text>
+
+  <!-- ── Relationships ── -->
+  <!-- BucketGenerator uses FundScorer -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+    <marker id="arr-g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#1a7a4a"/>
+    </marker>
+    <marker id="dep" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2c5f8a"/>
+    </marker>
+  </defs>
+
+  <!-- BucketGenerator → FundScorer (uses) -->
+  <line x1="180" y1="100" x2="218" y2="100" stroke="#2c5f8a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#dep)"/>
+  <text x="199" y="97" text-anchor="middle" font-size="8" fill="#2c5f8a">uses</text>
+
+  <!-- FundScorer → AnalyticsEngine (depends) -->
+  <line x1="390" y1="120" x2="428" y2="120" stroke="#2c5f8a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#dep)"/>
+  <text x="409" y="117" text-anchor="middle" font-size="8" fill="#2c5f8a">uses</text>
+
+  <!-- BucketGenerator → AttributionService -->
+  <line x1="95" y1="147" x2="95" y2="208" stroke="#1a7a4a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-g)"/>
+  <text x="100" y="182" font-size="8" fill="#1a7a4a">calls</text>
+
+  <!-- BucketGenerator → BenchmarkService -->
+  <line x1="180" y1="147" x2="295" y2="208" stroke="#1a7a4a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-g)"/>
+
+  <!-- AttributionService → BenchmarkService (depends) -->
+  <line x1="210" y1="280" x2="248" y2="280" stroke="#1a7a4a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-g)"/>
+
+  <!-- BenchmarkService → MarketDataService -->
+  <line x1="450" y1="280" x2="488" y2="280" stroke="#1a7a4a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-g)"/>
+
+  <!-- AttributionService reads NAVRecord -->
+  <line x1="75" y1="342" x2="75" y2="378" stroke="#555" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+
+  <!-- BenchmarkService reads Cache -->
+  <line x1="545" y1="342" x2="545" y2="378" stroke="#555" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+
+  <!-- Legend -->
+  <rect x="400" y="472" width="290" height="22" rx="3" fill="#f0f0f0" stroke="#aaa" stroke-width="0.8"/>
+  <line x1="410" y1="483" x2="430" y2="483" stroke="#2c5f8a" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="435" y="487" font-size="9" fill="#333">«uses» / «depends»</text>
+  <line x1="510" y1="483" x2="530" y2="483" stroke="#555" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <text x="535" y="487" font-size="9" fill="#333">reads DB</text>
+
+</svg>

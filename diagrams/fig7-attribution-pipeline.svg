@@ -1,0 +1,111 @@
+<svg width="680" height="360" viewBox="0 0 680 360" xmlns="http://www.w3.org/2000/svg" font-family="Arial,Helvetica,sans-serif">
+
+  <text x="340" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#111">Attribution Analysis Pipeline</text>
+  <text x="340" y="33" text-anchor="middle" font-size="9.5" fill="#555">Three independent threads converging to the full attribution report</text>
+
+  <defs>
+    <marker id="pa" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2c5f8a"/>
+    </marker>
+    <marker id="pa-g" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#1a7a4a"/>
+    </marker>
+    <marker id="pa-p" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#8b2c8a"/>
+    </marker>
+  </defs>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- THREAD 1: BHB Attribution (top)                -->
+  <!-- ─────────────────────────────────────────────── -->
+
+  <!-- Input: Portfolio weights -->
+  <rect x="10" y="50" width="130" height="36" rx="4" fill="#e8f0f8" stroke="#2c5f8a" stroke-width="1.2"/>
+  <text x="75" y="67" text-anchor="middle" font-size="9.5" fill="#111" font-weight="bold">Portfolio Weights</text>
+  <text x="75" y="79" text-anchor="middle" font-size="8.5" fill="#555">W_p,i per category</text>
+
+  <!-- Input: Policy weights -->
+  <rect x="10" y="100" width="130" height="36" rx="4" fill="#e8f0f8" stroke="#2c5f8a" stroke-width="1.2"/>
+  <text x="75" y="117" text-anchor="middle" font-size="9.5" fill="#111" font-weight="bold">Policy Weights</text>
+  <text x="75" y="129" text-anchor="middle" font-size="8.5" fill="#555">W_b,i from strategy</text>
+
+  <!-- Input: Fund returns per category -->
+  <rect x="10" y="150" width="130" height="36" rx="4" fill="#e8f0f8" stroke="#2c5f8a" stroke-width="1.2"/>
+  <text x="75" y="167" text-anchor="middle" font-size="9.5" fill="#111" font-weight="bold">Fund Returns</text>
+  <text x="75" y="179" text-anchor="middle" font-size="8.5" fill="#555">R_p,i per category</text>
+
+  <!-- Input: Category benchmarks -->
+  <rect x="10" y="200" width="130" height="36" rx="4" fill="#e8f0f8" stroke="#2c5f8a" stroke-width="1.2"/>
+  <text x="75" y="217" text-anchor="middle" font-size="9.5" fill="#111" font-weight="bold">Category Benchmarks</text>
+  <text x="75" y="229" text-anchor="middle" font-size="8.5" fill="#555">R_b,i from NAV proxies</text>
+
+  <!-- BHB Process box -->
+  <rect x="185" y="100" width="140" height="120" rx="5" fill="#2c5f8a"/>
+  <text x="255" y="130" text-anchor="middle" font-size="10" font-weight="bold" fill="white">BHB</text>
+  <text x="255" y="144" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Attribution</text>
+  <text x="255" y="162" text-anchor="middle" font-size="8.5" fill="#c0d8f0">Allocation Effect:</text>
+  <text x="255" y="173" text-anchor="middle" font-size="8" fill="#c0d8f0">(Wp−Wb)×(Rb,i−Rb)</text>
+  <text x="255" y="186" text-anchor="middle" font-size="8.5" fill="#c0d8f0">Selection Effect:</text>
+  <text x="255" y="197" text-anchor="middle" font-size="8" fill="#c0d8f0">Wb×(Rp,i−Rb,i)</text>
+  <text x="255" y="210" text-anchor="middle" font-size="8.5" fill="#c0d8f0">+ Interaction</text>
+
+  <!-- Arrows from inputs to BHB -->
+  <line x1="140" y1="68" x2="183" y2="125" stroke="#2c5f8a" stroke-width="1.2" marker-end="url(#pa)"/>
+  <line x1="140" y1="118" x2="183" y2="140" stroke="#2c5f8a" stroke-width="1.2" marker-end="url(#pa)"/>
+  <line x1="140" y1="165" x2="183" y2="165" stroke="#2c5f8a" stroke-width="1.2" marker-end="url(#pa)"/>
+  <line x1="140" y1="215" x2="183" y2="188" stroke="#2c5f8a" stroke-width="1.2" marker-end="url(#pa)"/>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- THREAD 2: Rolling IR (middle row)               -->
+  <!-- ─────────────────────────────────────────────── -->
+
+  <!-- Input: NAV history -->
+  <rect x="10" y="270" width="130" height="36" rx="4" fill="#eaf5ee" stroke="#1a7a4a" stroke-width="1.2"/>
+  <text x="75" y="287" text-anchor="middle" font-size="9.5" fill="#111" font-weight="bold">NAV History</text>
+  <text x="75" y="299" text-anchor="middle" font-size="8.5" fill="#555">Real fund + Nifty50 NAVs</text>
+
+  <!-- Rolling IR process -->
+  <rect x="185" y="258" width="140" height="60" rx="5" fill="#1a7a4a"/>
+  <text x="255" y="278" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Rolling Windows</text>
+  <text x="255" y="293" text-anchor="middle" font-size="8.5" fill="#b0e8c0">1Y &amp; 3Y sliding (30d step)</text>
+  <text x="255" y="305" text-anchor="middle" font-size="8.5" fill="#b0e8c0">Consistency Score + IR</text>
+
+  <line x1="140" y1="287" x2="183" y2="287" stroke="#1a7a4a" stroke-width="1.2" marker-end="url(#pa-g)"/>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- THREAD 3: Jensen's Alpha (separate)             -->
+  <!-- ─────────────────────────────────────────────── -->
+
+  <!-- This flows from portfolio beta + benchmark returns already computed above -->
+  <rect x="185" y="38" width="140" height="50" rx="5" fill="#8b2c8a"/>
+  <text x="255" y="57" text-anchor="middle" font-size="10" font-weight="bold" fill="white">Jensen's Alpha</text>
+  <text x="255" y="71" text-anchor="middle" font-size="8.5" fill="#e0c0e8">α = Rp−[Rf + β×(Rm−Rf)]</text>
+  <text x="255" y="83" text-anchor="middle" font-size="8" fill="#e0c0e8">Rf = 6.5%, β = wtd. portfolio beta</text>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- Merge → Full Attribution Report                 -->
+  <!-- ─────────────────────────────────────────────── -->
+
+  <!-- Merge funnel lines -->
+  <line x1="325" y1="63"  x2="430" y2="140" stroke="#8b2c8a" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="325" y1="160" x2="428" y2="160" stroke="#2c5f8a" stroke-width="1.5" marker-end="url(#pa)"/>
+  <line x1="325" y1="288" x2="430" y2="182" stroke="#1a7a4a" stroke-width="1.5" marker-end="url(#pa-g)"/>
+
+  <!-- Output: Attribution Report -->
+  <rect x="428" y="100" width="240" height="180" rx="6" fill="#f0faf5" stroke="#1a7a4a" stroke-width="2"/>
+  <text x="548" y="122" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a7a4a">Attribution Report</text>
+  <line x1="438" y1="128" x2="658" y2="128" stroke="#1a7a4a" stroke-width="0.8"/>
+
+  <text x="440" y="146" font-size="9.5" fill="#111" font-weight="bold">summary:</text>
+  <text x="448" y="158" font-size="9" fill="#333">• jensensAlpha: +3.41%</text>
+  <text x="448" y="170" font-size="9" fill="#333">• informationRatio: 0.71</text>
+  <text x="448" y="182" font-size="9" fill="#333">• verdict: fund_selection_adds_value</text>
+  <text x="440" y="198" font-size="9.5" fill="#111" font-weight="bold">bhbAttribution:</text>
+  <text x="448" y="210" font-size="9" fill="#333">• allocationEffect: +1.82%</text>
+  <text x="448" y="222" font-size="9" fill="#333">• selectionEffect: +2.15% ← key result</text>
+  <text x="448" y="234" font-size="9" fill="#333">• dominantSource: selection</text>
+  <text x="440" y="250" font-size="9.5" fill="#111" font-weight="bold">rollingConsistency:</text>
+  <text x="448" y="262" font-size="9" fill="#333">• consistencyScore: 72.5%  |  IR: 0.71</text>
+
+  <rect x="1" y="1" width="678" height="358" rx="4" fill="none" stroke="#ccc" stroke-width="1"/>
+</svg>

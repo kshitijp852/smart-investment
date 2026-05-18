@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const FinancialData = require('../models/FinancialData');
-const { cagr, computeReturns } = require('../utils/analytics');
+const { cagr, computeReturns, recencyWeightedCAGR } = require('../utils/analytics');
 const {
   sharpeRatio,
   sortinoRatio,
@@ -11,8 +11,11 @@ const {
   informationRatio,
   standardDeviation,
   calculateFundScore,
-  generateMarketReturns
+  generateMarketReturns,
+  getExpenseRatioForCategory,
+  getTurnoverRatioForCategory
 } = require('../utils/advancedAnalytics');
+const { getMarketReturns, getFallbackReturns } = require('../services/marketDataService');
 const {
   compareWithBenchmark,
   generatePerformanceChartData
@@ -32,56 +35,61 @@ router.post('/generate', async (req, res) => {
       });
     }
     
+    // Fetch real Nifty 50 market returns once for beta/alpha computation
+    let marketReturnsPool;
+    try {
+      marketReturnsPool = await getMarketReturns(120);
+    } catch (_) {
+      marketReturnsPool = getFallbackReturns(120);
+    }
+
     // Calculate comprehensive metrics for each fund
     const fundsWithMetrics = allFunds.map(fund => {
       const priceHistory = fund.priceHistory || [];
       const returns = computeReturns(priceHistory);
-      
-      if (!returns || returns.length < 2) {
-        return null;
-      }
-      
-      // Generate market returns for comparison (in production, use actual benchmark data)
-      const marketReturns = generateMarketReturns(returns.length);
-      
-      // Calculate all ratios
-      const fundCAGR = cagr(priceHistory) || 0;
-      const fundSharpe = sharpeRatio(returns);
-      const fundSortino = sortinoRatio(returns);
+      if (!returns || returns.length < 2) return null;
+
+      const mktLen = returns.length;
+      const marketReturns = marketReturnsPool.length >= mktLen
+        ? marketReturnsPool.slice(-mktLen)
+        : [...getFallbackReturns(mktLen - marketReturnsPool.length), ...marketReturnsPool];
+
+      const fundCAGR = recencyWeightedCAGR(priceHistory) || cagr(priceHistory) || 0;
       const fundBeta = beta(returns, marketReturns);
-      const fundTreynor = treynorRatio(returns, fundBeta);
-      const fundAlpha = alpha(returns, marketReturns, fundBeta);
-      const fundInfoRatio = informationRatio(returns, marketReturns);
-      const fundSD = standardDeviation(returns);
-      
-      // Simulate expense and turnover ratios (in production, get from fund data)
-      const expenseRatio = 0.005 + Math.random() * 0.02; // 0.5% to 2.5%
-      const turnoverRatio = 0.2 + Math.random() * 0.8; // 20% to 100%
-      
+
       return {
         ...fund,
         calculatedReturn: fundCAGR,
         metrics: {
-          sharpeRatio: fundSharpe,
-          sortinoRatio: fundSortino,
-          beta: fundBeta,
-          treynorRatio: fundTreynor,
-          alpha: fundAlpha,
-          informationRatio: fundInfoRatio,
-          standardDeviation: fundSD,
-          expenseRatio: expenseRatio,
-          turnoverRatio: turnoverRatio
+          sharpeRatio:       sharpeRatio(returns),
+          sortinoRatio:      sortinoRatio(returns),
+          beta:              fundBeta,
+          treynorRatio:      treynorRatio(returns, fundBeta),
+          alpha:             alpha(returns, marketReturns, fundBeta),
+          informationRatio:  informationRatio(returns, marketReturns),
+          standardDeviation: standardDeviation(returns),
+          expenseRatio:      getExpenseRatioForCategory(fund.meta?.category),
+          turnoverRatio:     getTurnoverRatioForCategory(fund.meta?.category)
         }
       };
     }).filter(f => f !== null);
-    
-    // Calculate scores for all funds
+
+    // Per-category metric pools for category-aware normalization
+    const metricsByCategory = {};
+    fundsWithMetrics.forEach(fund => {
+      const cat = fund.meta?.category || 'other';
+      if (!metricsByCategory[cat]) metricsByCategory[cat] = [];
+      metricsByCategory[cat].push(fund.metrics);
+    });
+
     const allMetrics = fundsWithMetrics.map(f => f.metrics);
     const scoredFunds = fundsWithMetrics.map(fund => {
-      const scoreData = calculateFundScore(fund.metrics, allMetrics);
+      const cat             = fund.meta?.category || 'other';
+      const categoryMetrics = metricsByCategory[cat];
+      const scoreData       = calculateFundScore(fund.metrics, allMetrics, categoryMetrics, riskLevel);
       return {
         ...fund,
-        finalScore: scoreData.finalScore,
+        finalScore:     scoreData.finalScore,
         scoreBreakdown: scoreData
       };
     });
@@ -201,9 +209,8 @@ router.post('/generate', async (req, res) => {
     }
     
     // Calculate bucket summary
-    const totalInvestment = bucket.reduce((sum, f) => sum + f.allocation, 0);
     const totalProjectedValue = bucket.reduce((sum, f) => sum + f.projectedValue, 0);
-    const totalGain = totalProjectedValue - totalInvestment;
+    const totalGain = totalProjectedValue - amount;
     const overallReturn = totalWeightedReturn;
     
     // Group by category for display
@@ -245,7 +252,7 @@ router.post('/generate', async (req, res) => {
         icon: strategy.icon
       },
       summary: {
-        totalInvestment: totalInvestment,
+        totalInvestment: amount,
         totalProjectedValue: totalProjectedValue,
         totalGain: totalGain,
         overallReturn: overallReturn,

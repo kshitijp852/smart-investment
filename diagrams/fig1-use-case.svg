@@ -1,0 +1,82 @@
+<svg width="640" height="420" viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg" font-family="Arial,Helvetica,sans-serif">
+
+  <!-- Title -->
+  <text x="320" y="22" text-anchor="middle" font-size="13" font-weight="bold" fill="#111">Use Case Diagram — SmartInvest System</text>
+
+  <!-- System Boundary -->
+  <rect x="140" y="38" width="360" height="360" rx="6" fill="#f0f6ff" stroke="#2c5f8a" stroke-width="2"/>
+  <text x="320" y="54" text-anchor="middle" font-size="10" fill="#2c5f8a" font-style="italic">«system boundary»</text>
+  <text x="320" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#2c5f8a">SmartInvest</text>
+
+  <!-- ── User Actor (left) ── -->
+  <circle cx="62" cy="155" r="13" fill="none" stroke="#333" stroke-width="1.5"/>
+  <line x1="62" y1="168" x2="62" y2="200" stroke="#333" stroke-width="1.5"/>
+  <line x1="42" y1="182" x2="82" y2="182" stroke="#333" stroke-width="1.5"/>
+  <line x1="62" y1="200" x2="45" y2="220" stroke="#333" stroke-width="1.5"/>
+  <line x1="62" y1="200" x2="79" y2="220" stroke="#333" stroke-width="1.5"/>
+  <text x="62" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="#111">User</text>
+
+  <!-- ── Admin Actor (right) ── -->
+  <circle cx="578" cy="155" r="13" fill="none" stroke="#333" stroke-width="1.5"/>
+  <line x1="578" y1="168" x2="578" y2="200" stroke="#333" stroke-width="1.5"/>
+  <line x1="558" y1="182" x2="598" y2="182" stroke="#333" stroke-width="1.5"/>
+  <line x1="578" y1="200" x2="561" y2="220" stroke="#333" stroke-width="1.5"/>
+  <line x1="578" y1="200" x2="595" y2="220" stroke="#333" stroke-width="1.5"/>
+  <text x="578" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="#111">Admin</text>
+
+  <!-- ── User-side Use Cases ── -->
+  <!-- UC1: Submit Investment Parameters -->
+  <ellipse cx="255" cy="105" rx="88" ry="22" fill="white" stroke="#2c5f8a" stroke-width="1.5"/>
+  <text x="255" y="102" text-anchor="middle" font-size="10" fill="#111">Submit Investment</text>
+  <text x="255" y="114" text-anchor="middle" font-size="10" fill="#111">Parameters</text>
+
+  <!-- UC2: View Recommendations -->
+  <ellipse cx="255" cy="170" rx="88" ry="22" fill="white" stroke="#2c5f8a" stroke-width="1.5"/>
+  <text x="255" y="167" text-anchor="middle" font-size="10" fill="#111">View Portfolio</text>
+  <text x="255" y="179" text-anchor="middle" font-size="10" fill="#111">Recommendations</text>
+
+  <!-- UC3: View Attribution Report -->
+  <ellipse cx="255" cy="235" rx="88" ry="22" fill="white" stroke="#2c5f8a" stroke-width="1.5"/>
+  <text x="255" y="232" text-anchor="middle" font-size="10" fill="#111">View Attribution</text>
+  <text x="255" y="244" text-anchor="middle" font-size="10" fill="#111">Report</text>
+
+  <!-- UC4: Save Portfolio -->
+  <ellipse cx="255" cy="300" rx="88" ry="22" fill="white" stroke="#2c5f8a" stroke-width="1.5"/>
+  <text x="255" y="297" text-anchor="middle" font-size="10" fill="#111">Save Portfolio</text>
+  <text x="255" y="309" text-anchor="middle" font-size="10" fill="#111">(requires login)</text>
+
+  <!-- UC5: Explore Funds -->
+  <ellipse cx="255" cy="365" rx="88" ry="22" fill="white" stroke="#2c5f8a" stroke-width="1.5"/>
+  <text x="255" y="362" text-anchor="middle" font-size="10" fill="#111">Explore</text>
+  <text x="255" y="374" text-anchor="middle" font-size="10" fill="#111">Funds</text>
+
+  <!-- ── Admin-side Use Cases ── -->
+  <!-- UC6: Trigger Data Sync -->
+  <ellipse cx="420" cy="150" rx="82" ry="22" fill="white" stroke="#2c5f8a" stroke-width="1.5"/>
+  <text x="420" y="147" text-anchor="middle" font-size="10" fill="#111">Trigger</text>
+  <text x="420" y="159" text-anchor="middle" font-size="10" fill="#111">Data Sync</text>
+
+  <!-- UC7: Load Sample Data -->
+  <ellipse cx="420" cy="230" rx="82" ry="22" fill="white" stroke="#2c5f8a" stroke-width="1.5"/>
+  <text x="420" y="227" text-anchor="middle" font-size="10" fill="#111">Load</text>
+  <text x="420" y="239" text-anchor="middle" font-size="10" fill="#111">Sample Data</text>
+
+  <!-- ── Association lines: User → UCs ── -->
+  <line x1="76" y1="148" x2="167" y2="108" stroke="#555" stroke-width="1"/>
+  <line x1="76" y1="158" x2="167" y2="170" stroke="#555" stroke-width="1"/>
+  <line x1="76" y1="168" x2="167" y2="235" stroke="#555" stroke-width="1"/>
+  <line x1="76" y1="178" x2="167" y2="295" stroke="#555" stroke-width="1"/>
+  <line x1="76" y1="188" x2="167" y2="360" stroke="#555" stroke-width="1"/>
+
+  <!-- ── Association lines: Admin → UCs ── -->
+  <line x1="563" y1="148" x2="502" y2="152" stroke="#555" stroke-width="1"/>
+  <line x1="563" y1="165" x2="502" y2="230" stroke="#555" stroke-width="1"/>
+
+  <!-- ── «include» note for Save Portfolio ── -->
+  <text x="307" y="278" text-anchor="middle" font-size="9" fill="#888" font-style="italic">«include»</text>
+  <line x1="255" y1="278" x2="255" y2="278" stroke="none"/>
+
+  <!-- Legend -->
+  <rect x="148" y="395" width="344" height="18" rx="3" fill="#e8f0f8" stroke="#2c5f8a" stroke-width="0.5"/>
+  <text x="320" y="408" text-anchor="middle" font-size="9" fill="#2c5f8a">Oval = Use Case   |   Stick Figure = Actor   |   Rectangle = System Boundary</text>
+</svg>

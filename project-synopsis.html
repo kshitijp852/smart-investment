@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Synopsis – SmartInvest: AI-Powered Investment Recommendation System</title>
+<style>
+  /* ── Reset & base ───────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.6;
+    color: #000;
+    background: #fff;
+  }
+
+  /* ── Page wrapper ───────────────────────────────────────────────────── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 25mm 25mm 20mm 30mm;
+    background: #fff;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { width: 100%; padding: 25mm 25mm 20mm 30mm; box-shadow: none; }
+    .page-break { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+  }
+
+  @media screen {
+    body { background: #e0e0e0; }
+    .page {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      margin: 20px auto;
+      border: 1px solid #ccc;
+    }
+  }
+
+  .page-break { page-break-before: always; margin-top: 0; }
+
+  /* ── Typography ─────────────────────────────────────────────────────── */
+  h1 { font-size: 16pt; font-weight: bold; text-align: center; }
+  h2 { font-size: 14pt; font-weight: bold; margin-top: 18pt; margin-bottom: 8pt; }
+  h3 { font-size: 12pt; font-weight: bold; margin-top: 14pt; margin-bottom: 6pt; }
+  h4 { font-size: 12pt; font-weight: bold; font-style: italic; margin-top: 10pt; margin-bottom: 4pt; }
+  p  { margin-bottom: 8pt; text-align: justify; }
+  ul, ol { margin: 6pt 0 8pt 22pt; }
+  li { margin-bottom: 4pt; }
+  strong { font-weight: bold; }
+  em { font-style: italic; }
+
+  /* ── Cover page ─────────────────────────────────────────────────────── */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 247mm;
+    justify-content: space-between;
+    padding: 10mm 0;
+  }
+  .cover-logo {
+    font-size: 11pt;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  .cover-university { font-size: 22pt; font-weight: bold; letter-spacing: 2px; margin-bottom: 4pt; }
+  .cover-school     { font-size: 14pt; font-weight: bold; margin-bottom: 4pt; }
+  .cover-dept       { font-size: 13pt; margin-bottom: 4pt; }
+  .cover-year       { font-size: 12pt; font-style: italic; margin-bottom: 16pt; }
+  .cover-title-box {
+    border: 2px solid #000;
+    padding: 14pt 20pt;
+    margin: 10pt 0;
+    width: 100%;
+  }
+  .cover-synopsis-label { font-size: 13pt; font-style: italic; margin-bottom: 6pt; }
+  .cover-project-title  { font-size: 17pt; font-weight: bold; }
+  .cover-submitted-text { font-size: 11pt; font-style: italic; margin-top: 8pt; }
+
+  .cover-members { width: 100%; margin-top: 10pt; }
+  .cover-members table { width: 100%; border-collapse: collapse; font-size: 11pt; }
+  .cover-members th {
+    background: #000; color: #fff;
+    padding: 5pt 8pt; font-weight: bold; text-align: left;
+  }
+  .cover-members td { padding: 4pt 8pt; border-bottom: 1px solid #ccc; text-align: left; }
+
+  .cover-guide { font-size: 12pt; margin-top: 10pt; }
+
+  /* ── Declaration / Certificate pages ───────────────────────────────── */
+  .section-title {
+    font-size: 15pt;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 16pt;
+    letter-spacing: 1px;
+  }
+  .signature-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30pt;
+  }
+  .signature-block { text-align: center; font-size: 11pt; }
+  .signature-line { border-top: 1px solid #000; width: 120px; margin: 0 auto 4pt; }
+
+  /* ── Abstract ───────────────────────────────────────────────────────── */
+  .abstract-box {
+    border: 1px solid #888;
+    padding: 12pt 16pt;
+    margin: 8pt 0 16pt;
+    background: #fafafa;
+  }
+
+  /* ── TOC ────────────────────────────────────────────────────────────── */
+  .toc-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 3pt 0;
+    border-bottom: 1px dotted #aaa;
+    font-size: 11.5pt;
+  }
+  .toc-entry.toc-chapter { font-weight: bold; margin-top: 6pt; }
+  .toc-entry.toc-sub { padding-left: 16pt; }
+  .toc-page { white-space: nowrap; }
+
+  /* ── Tables ─────────────────────────────────────────────────────────── */
+  table.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11pt;
+    margin: 8pt 0 12pt;
+  }
+  table.report-table th {
+    background: #2c2c2c;
+    color: #fff;
+    padding: 6pt 8pt;
+    text-align: left;
+    font-weight: bold;
+  }
+  table.report-table td {
+    padding: 5pt 8pt;
+    border: 1px solid #ccc;
+    vertical-align: top;
+  }
+  table.report-table tr:nth-child(even) td { background: #f5f5f5; }
+  .table-caption {
+    font-size: 11pt;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 10pt;
+    color: #333;
+  }
+
+  /* ── Formula boxes ───────────────────────────────────────────────────── */
+  .formula-box {
+    background: #f0f4f8;
+    border-left: 4px solid #2c5f8a;
+    padding: 8pt 12pt;
+    margin: 8pt 0;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11pt;
+  }
+
+  /* ── Info callout ────────────────────────────────────────────────────── */
+  .callout {
+    border: 1px solid #2c5f8a;
+    border-radius: 4px;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    background: #f0f6ff;
+    font-size: 11pt;
+  }
+  .callout-title { font-weight: bold; color: #2c5f8a; margin-bottom: 4pt; }
+
+  /* ── Chapter heading ─────────────────────────────────────────────────── */
+  .chapter-heading {
+    border-bottom: 2px solid #000;
+    padding-bottom: 6pt;
+    margin-bottom: 12pt;
+  }
+  .chapter-number { font-size: 11pt; color: #555; margin-bottom: 2pt; }
+  .chapter-title  { font-size: 15pt; font-weight: bold; }
+
+  /* ── Figure placeholder ──────────────────────────────────────────────── */
+  .diagram-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 8pt 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+  }
+  .figure-placeholder {
+    border: 1px dashed #888;
+    background: #f9f9f9;
+    text-align: center;
+    padding: 20pt;
+    margin: 8pt 0;
+    font-size: 11pt;
+    color: #555;
+    font-style: italic;
+  }
+  .figure-caption {
+    text-align: center;
+    font-style: italic;
+    font-size: 11pt;
+    margin-bottom: 10pt;
+    color: #333;
+  }
+
+  /* ── Gantt chart ─────────────────────────────────────────────────────── */
+  .gantt-bar {
+    height: 14px;
+    background: #2c5f8a;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* ── References ──────────────────────────────────────────────────────── */
+  .reference-item {
+    font-size: 11pt;
+    padding: 4pt 0 4pt 22pt;
+    text-indent: -22pt;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 4pt;
+  }
+
+  /* ── Score weight diagram ─────────────────────────────────────────────── */
+  .weight-bar-container { margin: 6pt 0; }
+  .weight-bar-label { font-size: 11pt; display: inline-block; width: 240pt; }
+  .weight-bar-track {
+    display: inline-block;
+    width: 150pt;
+    background: #e0e0e0;
+    height: 14px;
+    vertical-align: middle;
+    border-radius: 2px;
+    margin-right: 6pt;
+  }
+  .weight-bar-fill { height: 100%; border-radius: 2px; background: #2c5f8a; }
+  .weight-bar-pct { font-size: 10pt; font-weight: bold; color: #2c5f8a; }
+
+  /* ── Attribution diagram ─────────────────────────────────────────────── */
+  .bhb-row {
+    display: flex;
+    align-items: center;
+    padding: 6pt 0;
+    border-bottom: 1px solid #eee;
+  }
+  .bhb-label { width: 160pt; font-size: 11pt; font-weight: bold; }
+  .bhb-formula { font-family: monospace; font-size: 10.5pt; color: #2c5f8a; flex: 1; }
+  .bhb-meaning { font-size: 10.5pt; color: #444; flex: 1; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- COVER PAGE                                                              -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="cover">
+
+    <div>
+      <div class="cover-university">AMITY UNIVERSITY MUMBAI</div>
+      <div class="cover-school">AMITY SCHOOL OF ENGINEERING AND TECHNOLOGY</div>
+      <div class="cover-dept">Department of Computer Science &amp; Engineering</div>
+      <div class="cover-year">Academic Year 2025–26</div>
+    </div>
+
+    <div class="cover-title-box">
+      <div class="cover-synopsis-label">Synopsis on</div>
+      <div class="cover-project-title">SmartInvest: AI-Powered Investment Recommendation System</div>
+      <div class="cover-submitted-text">Submitted in partial fulfilment of the requirements for the degree of<br>
+        <strong>Bachelor of Technology</strong><br>
+        Department of Computer Science &amp; Engineering
+      </div>
+    </div>
+
+    <div class="cover-members">
+      <p style="font-weight:bold; margin-bottom:6pt;">Submitted By</p>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Enrolment No.</th>
+        </tr>
+        <tr><td>Sawant Anjali Ashok</td><td>A70405222155</td></tr>
+        <tr><td>Shivani Deepak Kumar Yadav</td><td>A70405222153</td></tr>
+        <tr><td>Kshitij Patil</td><td>A70405222160</td></tr>
+        <tr><td>Aditya Kamarouthu</td><td>A70405222048</td></tr>
+      </table>
+    </div>
+
+    <div class="cover-guide">
+      <strong>Under the Guidance of</strong><br>
+      Dr. Saranya Pandian<br>
+      Faculty, Department of Computer Science &amp; Engineering
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- DECLARATION                                                             -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-title">DECLARATION OF ACADEMIC INTEGRITY</div>
+  <p>We declare that this written submission conveys our ideas in our own words. We have adequately cited and referenced the original sources. We also declare that we have adhered to all principles of academic honesty and integrity and have not misrepresented or fabricated or falsified any idea / data / fact / source in our submission.</p>
+  <p>We understand that any violation of the above will be cause for disciplinary action by the institute and can evoke penal action from the sources which have thus not been properly cited or from whom proper permission has not been taken when needed.</p>
+
+  <div class="signature-row" style="margin-top: 50pt;">
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div>Sawant Anjali Ashok</div>
+    </div>
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div>Shivani D. K. Yadav</div>
+    </div>
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div>Kshitij Patil</div>
+    </div>
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div>Aditya Kamarouthu</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- APPROVAL + CERTIFICATE                                                  -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-title">APPROVAL</div>
+  <p>This is to certify that <strong>Sawant Anjali Ashok, Shivani Deepak Kumar Yadav, Kshitij Patil, Aditya Kamarouthu</strong> have satisfactorily completed their synopsis for major project on <em>SmartInvest: AI-Powered Investment Recommendation System</em> during the academic term 2025–26 and their report is approved for submission.</p>
+
+  <div class="signature-row" style="margin-top: 40pt;">
+    <div class="signature-block">
+      <div class="signature-line" style="width:160px;"></div>
+      <div>Examiner 1</div>
+    </div>
+    <div class="signature-block">
+      <div class="signature-line" style="width:160px;"></div>
+      <div>Examiner 2</div>
+    </div>
+    <div class="signature-block">
+      <div class="signature-line" style="width:160px;"></div>
+      <div>Examiner 3</div>
+    </div>
+  </div>
+  <p style="margin-top:16pt;"><strong>Date:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Place:</strong></p>
+
+  <div style="margin-top: 30pt;">
+    <div class="section-title">CERTIFICATE</div>
+    <p>This is to certify that the synopsis for major project titled <em>"SmartInvest: AI-Powered Investment Recommendation System"</em> is a bonafide work of <strong>Sawant Anjali Ashok, Shivani Deepak Kumar Yadav, Kshitij Patil, Aditya Kamarouthu</strong> submitted to the Amity School of Engineering and Technology, Amity University Mumbai in partial fulfilment of the requirement for the degree of <strong>B.Tech Computer Science &amp; Engineering</strong>.</p>
+
+    <div class="signature-row" style="margin-top: 40pt;">
+      <div class="signature-block">
+        <div class="signature-line" style="width:160px;"></div>
+        <div><strong>Dr. Saranya Pandian</strong></div>
+        <div>Project Supervisor</div>
+      </div>
+      <div class="signature-block">
+        <div class="signature-line" style="width:160px;"></div>
+        <div><strong>Dr. Deepa Parasar</strong></div>
+        <div>HoD, CSE</div>
+      </div>
+      <div class="signature-block">
+        <div class="signature-line" style="width:160px;"></div>
+        <div><strong>Dr. Penna Suprasanna</strong></div>
+        <div>Director I/C, ASET</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- ACKNOWLEDGEMENT                                                         -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-title">ACKNOWLEDGEMENT</div>
+  <p>This synopsis for the major project has been a profound experience of learning and professional development. We take this opportunity to express our deepest gratitude and special thanks to our supervisor, <strong>Dr. Saranya Pandian</strong>, Faculty of the Department of Computer Science and Engineering at Amity University, Mumbai. Despite a demanding schedule, our mentor consistently took time to guide, hear, and keep us on the right path. Her constant guidance and constructive feedback throughout the course of this project have led to its timely and successful completion.</p>
+  <p>We would also like to express our deepest thanks to our HoD (CSE), <strong>Dr. Deepa Parasar</strong>, for her unwavering support and encouragement throughout the B.Tech programme.</p>
+  <p>Our sincere gratitude goes to all faculty members of Amity School of Engineering and Technology (ASET) for their motivating presence and academic counsel during our undergraduate journey.</p>
+  <p>We are equally thankful to our Director I/C, <strong>Dr. Penna Suprasanna</strong>, who has been a pillar of institutional support throughout the project.</p>
+  <p>Lastly, we extend our wholehearted thanks to our families and friends for their unconditional love, patience, and encouragement in every endeavour we have undertaken. This project represents a significant milestone in our academic and professional development. We shall continue to apply and improve the knowledge and skills gained herein toward building solutions of lasting value.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- ABSTRACT                                                                -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-title">ABSTRACT</div>
+  <div class="abstract-box">
+    <p><strong>SmartInvest</strong> is a completed full-stack, AI-powered investment recommendation web application developed for novice and intermediate retail investors in the Indian market — particularly college students and young professionals navigating the complexity of over 2,500 mutual fund schemes.</p>
+    <p>The system addresses two interconnected research gaps: (1) the absence of multi-parameter, risk-adjusted fund scoring in accessible retail tools, and (2) the lack of portfolio-level performance attribution analysis in any Indian retail recommendation platform.</p>
+    <p>The core contributions of this project are:</p>
+    <ul>
+      <li><strong>9-Parameter Composite Scoring Engine:</strong> Funds are evaluated using a weighted model spanning four categories — Risk-Adjusted Performance (45%: Sharpe, Sortino, Treynor), Stability (25%: Standard Deviation, Beta), Manager Skill (20%: Jensen's Alpha, Information Ratio), and Cost Efficiency (10%: Expense Ratio, Turnover Ratio). Normalization is performed at the category level to prevent cross-category contamination. Market returns are sourced from live Nifty 50 NAV data, replacing static synthetic proxies.</li>
+      <li><strong>Intelligent Portfolio Construction:</strong> A bucket strategy allocates funds across categories based on risk profile (Conservative / Balanced / Aggressive) and selects top-ranked, non-correlated funds using recency-weighted CAGR.</li>
+      <li><strong>Portfolio Attribution Framework:</strong> Implementing Brinson-Hood-Beebower (1986) decomposition, Jensen's Alpha (1968), rolling-window Information Ratio (Grinblatt &amp; Titman, 1992), and a dynamic category-weighted blended benchmark — none of which exist in any current Indian retail tool.</li>
+      <li><strong>SHAP Explainability:</strong> A Python ML microservice computes SHAP values per fund, linking individual fund selection reasoning to portfolio-level attribution effects.</li>
+    </ul>
+    <p>The system is built on a Node.js/Express backend, React.js frontend, MongoDB database, and real-time NAV data from mfapi.in. The attribution framework directly fills research gaps identified by Gupta &amp; Aggarwal (2014), Cuthbertson et al. (2016), and Cao et al. (2019).</p>
+  </div>
+  <p style="text-align:center; font-style:italic; font-size:11pt;"><strong>Keywords:</strong> Mutual Fund Recommendation, Risk-Adjusted Scoring, BHB Attribution, Jensen's Alpha, Information Ratio, SHAP Explainability, Indian Capital Markets, Portfolio Analysis</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- TABLE OF CONTENTS                                                       -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="section-title">TABLE OF CONTENTS</div>
+
+  <div class="toc-entry toc-chapter"><span>1. INTRODUCTION</span><span class="toc-page">1</span></div>
+  <div class="toc-entry toc-sub"><span>1.1 Background</span><span class="toc-page">1</span></div>
+  <div class="toc-entry toc-sub"><span>1.2 Motivation</span><span class="toc-page">2</span></div>
+
+  <div class="toc-entry toc-chapter"><span>2. LITERATURE SURVEY</span><span class="toc-page">3</span></div>
+  <div class="toc-entry toc-sub"><span>2.1 Introduction to Existing Solutions</span><span class="toc-page">3</span></div>
+  <div class="toc-entry toc-sub"><span>2.2 Existing Methodologies for Risk &amp; Return Analysis</span><span class="toc-page">4</span></div>
+  <div class="toc-entry toc-sub"><span>2.3 Comparative Analysis and Research Gaps</span><span class="toc-page">5</span></div>
+
+  <div class="toc-entry toc-chapter"><span>3. PROBLEM STATEMENT</span><span class="toc-page">8</span></div>
+
+  <div class="toc-entry toc-chapter"><span>4. SYSTEM ANALYSIS</span><span class="toc-page">9</span></div>
+  <div class="toc-entry toc-sub"><span>4.1 Functional Requirements</span><span class="toc-page">9</span></div>
+  <div class="toc-entry toc-sub"><span>4.2 Non-Functional Requirements</span><span class="toc-page">10</span></div>
+
+  <div class="toc-entry toc-chapter"><span>5. SYSTEM DESIGN</span><span class="toc-page">11</span></div>
+  <div class="toc-entry toc-sub"><span>5.1 Architectural Model</span><span class="toc-page">11</span></div>
+  <div class="toc-entry toc-sub"><span>5.2 Design Model – UML Diagrams</span><span class="toc-page">12</span></div>
+  <div class="toc-entry toc-sub"><span>5.3 Data Flow Diagrams (DFDs)</span><span class="toc-page">14</span></div>
+  <div class="toc-entry toc-sub"><span>5.4 Core Financial Engine: 9-Parameter Scoring Model</span><span class="toc-page">15</span></div>
+  <div class="toc-entry toc-sub"><span>5.5 Final Scoring and Ranking Logic</span><span class="toc-page">18</span></div>
+  <div class="toc-entry toc-sub"><span>5.6 API Integration (mfapi.in)</span><span class="toc-page">20</span></div>
+  <div class="toc-entry toc-sub"><span>5.7 Diversification &amp; Portfolio Construction Logic</span><span class="toc-page">20</span></div>
+  <div class="toc-entry toc-sub"><span>5.8 Performance Attribution Framework</span><span class="toc-page">21</span></div>
+
+  <div class="toc-entry toc-chapter"><span>6. PROJECT TIMELINE</span><span class="toc-page">24</span></div>
+
+  <div class="toc-entry toc-chapter"><span>7. CONCLUSION AND FUTURE SCOPE</span><span class="toc-page">25</span></div>
+  <div class="toc-entry toc-sub"><span>7.1 Conclusion</span><span class="toc-page">25</span></div>
+  <div class="toc-entry toc-sub"><span>7.2 Future Scope</span><span class="toc-page">25</span></div>
+
+  <div class="toc-entry toc-chapter"><span>8. REFERENCES</span><span class="toc-page">27</span></div>
+
+  <br>
+  <div class="section-title" style="font-size:13pt; margin-top:16pt;">LIST OF FIGURES</div>
+  <div class="toc-entry"><span>Fig. 1 – Use Case Diagram</span><span class="toc-page">12</span></div>
+  <div class="toc-entry"><span>Fig. 2 – Class Diagram</span><span class="toc-page">13</span></div>
+  <div class="toc-entry"><span>Fig. 3 – Sequence Diagram</span><span class="toc-page">13</span></div>
+  <div class="toc-entry"><span>Fig. 4 – DFD Level 0 (Context Diagram)</span><span class="toc-page">14</span></div>
+  <div class="toc-entry"><span>Fig. 5 – DFD Level 1</span><span class="toc-page">14</span></div>
+  <div class="toc-entry"><span>Fig. 6 – Scoring Weight Distribution</span><span class="toc-page">18</span></div>
+  <div class="toc-entry"><span>Fig. 7 – Attribution Analysis Pipeline</span><span class="toc-page">22</span></div>
+  <div class="toc-entry"><span>Fig. 8 – Gantt Chart</span><span class="toc-page">24</span></div>
+
+  <br>
+  <div class="section-title" style="font-size:13pt; margin-top:8pt;">LIST OF TABLES</div>
+  <div class="toc-entry"><span>Table 1 – Comparative Analysis of Existing Platforms</span><span class="toc-page">3</span></div>
+  <div class="toc-entry"><span>Table 2 – Research Gaps and System Response</span><span class="toc-page">6</span></div>
+  <div class="toc-entry"><span>Table 3 – Feature &amp; Methodology Comparison</span><span class="toc-page">7</span></div>
+  <div class="toc-entry"><span>Table 4 – Literature Reference and Methodology Table</span><span class="toc-page">8</span></div>
+  <div class="toc-entry"><span>Table 5 – 9-Parameter Scoring Model Summary</span><span class="toc-page">17</span></div>
+  <div class="toc-entry"><span>Table 6 – BHB Attribution Effects</span><span class="toc-page">22</span></div>
+  <div class="toc-entry"><span>Table 7 – Project Timeline</span><span class="toc-page">24</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 1: INTRODUCTION                                                 -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 1</div>
+    <div class="chapter-title">INTRODUCTION</div>
+  </div>
+
+  <h2>1.1 Background</h2>
+  <p>The Indian financial landscape has undergone a monumental transformation over the past decade. The convergence of digital payment infrastructure (UPI), accessible brokerage platforms such as Zerodha and Groww, and a surge in financial literacy has empowered millions of new retail investors. As of 2025, the number of demat accounts has crossed 150 million, with a significant portion of these new investors being young professionals and college students under the age of 30.</p>
+  <p>While access to markets has been democratized, the ability to make informed investment decisions has not kept pace. The mutual fund industry alone offers over 2,500 active schemes, each with its own objective, risk profile, cost structure, and benchmark. This "paradox of choice" frequently leads to decision paralysis or, worse, investment decisions based on superficial metrics such as trailing one-year returns or marketing materials.</p>
+  <p>Existing platforms predominantly focus on transaction execution and provide basic data filters, but lack a transparent, comprehensive framework for true risk-adjusted evaluation. More critically, no existing Indian retail platform implements portfolio-level performance attribution — the standard institutional method for understanding <em>why</em> a portfolio outperforms or underperforms its benchmark.</p>
+
+  <h2>1.2 Motivation</h2>
+  <p>The motivation for <strong>SmartInvest</strong> stems from the identification of two distinct but related gaps: one in the <em>selection</em> of funds (lack of multi-parameter scoring) and one in the <em>evaluation</em> of portfolios (absence of attribution analysis). The core motivations are:</p>
+
+  <ul>
+    <li><strong>To move beyond superficial metrics:</strong> The current retail ecosystem heavily emphasizes past point-to-point returns, which are statistically fragile and not indicative of future performance. This project introduces a 9-parameter composite scoring model grounded in established financial theory.</li>
+    <li><strong>To personalize and educate:</strong> Investment is not a one-size-fits-all endeavour. The tool personalizes recommendations based on risk tolerance, financial goals, and investment horizon. SHAP-based explainability ensures the user understands <em>why</em> a fund was selected.</li>
+    <li><strong>To implement institutional-grade attribution for retail investors:</strong> The Brinson-Hood-Beebower (BHB) model has been the standard for institutional portfolio evaluation since 1986. It has never been applied in an Indian retail recommendation tool. This project directly fills that gap.</li>
+    <li><strong>To simplify diversification:</strong> The system automates strategic asset allocation using a category-weighted bucket strategy, replacing the naive 1/N heuristic with a structured, risk-profile-driven allocation.</li>
+    <li><strong>To provide a holistic comparative view:</strong> The portfolio is benchmarked against a dynamic blended index — weighted by actual portfolio category composition — rather than a single generic equity index such as the Nifty 50.</li>
+  </ul>
+  <p>This project serves simultaneously as a practical utility for retail investors and an academic exercise in applying financial engineering, data science, and software engineering to a real-world problem of significant socioeconomic relevance.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 2: LITERATURE SURVEY                                            -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 2</div>
+    <div class="chapter-title">LITERATURE SURVEY</div>
+  </div>
+
+  <h2>2.1 Introduction to Existing Solutions</h2>
+  <p>A survey of the existing market reveals several categories of platforms and tools available to Indian retail investors:</p>
+
+  <ul>
+    <li><strong>Execution Platforms</strong> (e.g., Groww, Zerodha Coin, Paytm Money): Excellent for transacting in mutual funds. Provide basic NAV data, historical returns, and expense ratios. Rating systems are proprietary, backward-looking, and lack transparency. Primary purpose is transaction facilitation rather than analytical depth.</li>
+    <li><strong>Information Aggregators</strong> (e.g., Value Research, Morningstar India, Moneycontrol): Provide comprehensive data including star ratings, portfolio holdings, and analyst commentary. However, these are often overwhelming for novice investors and their methodologies — such as Morningstar's Star Rating — focus heavily on historical performance without forward-looking risk-adjustment.</li>
+    <li><strong>Robo-Advisors</strong> (e.g., Scripbox, ET Money Genius): Come closest to the proposed system's goals. They use questionnaires for risk profiling and recommend pre-selected fund buckets. However, the selection logic is a "black box," the fund universe is limited, and no platform provides attribution analysis explaining whether outperformance derives from allocation decisions or fund selection skill.</li>
+  </ul>
+
+  <table class="report-table">
+    <tr>
+      <th>Platform / Method</th>
+      <th>Strengths</th>
+      <th>Weaknesses / Gaps</th>
+    </tr>
+    <tr>
+      <td>Groww / Zerodha Coin</td>
+      <td>Excellent UI, seamless execution, real-time NAV</td>
+      <td>Lacks deep analytical tools; recommendations are generic; no attribution</td>
+    </tr>
+    <tr>
+      <td>Value Research / Moneycontrol</td>
+      <td>Comprehensive data repository</td>
+      <td>Overwhelming for novices; star ratings are backward-looking; no portfolio attribution</td>
+    </tr>
+    <tr>
+      <td>Robo-Advisors (Scripbox, ET Money)</td>
+      <td>Simple, goal-oriented process</td>
+      <td>"Black box" logic; limited fund universe; no allocation vs. selection decomposition</td>
+    </tr>
+    <tr>
+      <td>Academic Models (MPT / CAPM)</td>
+      <td>Theoretically sound, industry standard</td>
+      <td>Complex to implement; rarely translated to retail tools in Indian context</td>
+    </tr>
+  </table>
+  <p class="table-caption">Table 1: Comparative Analysis of Existing Investment Platforms and Methodologies</p>
+
+  <h2>2.2 Existing Methodologies for Risk &amp; Return Analysis</h2>
+  <p>The academic and financial literature provides several established models that form the theoretical basis for this project:</p>
+
+  <ul>
+    <li><strong>Modern Portfolio Theory (MPT) — Markowitz (1952):</strong> Posits that an optimal portfolio maximizes expected return for a given level of risk. Introduces diversification through asset correlation. The Sharpe Ratio is a direct application of MPT principles.</li>
+    <li><strong>Capital Asset Pricing Model (CAPM) — Sharpe (1964), Lintner (1965):</strong> Describes the relationship between systematic risk (Beta) and expected return. Jensen's Alpha (α) measures excess return above the CAPM-predicted level, representing fund manager skill.</li>
+    <li><strong>Post-Modern Portfolio Theory (PMPT):</strong> Addresses MPT's symmetric treatment of volatility. Investors are concerned only with downside volatility. This led to the Sortino Ratio, which uses downside deviation as the risk denominator.</li>
+    <li><strong>Brinson-Hood-Beebower Attribution (1986):</strong> The seminal framework for decomposing portfolio active return into allocation effect (category overweighting decisions) and selection effect (fund picking quality within each category). Found that 91.5% of variation in institutional portfolio returns is explained by asset allocation policy.</li>
+    <li><strong>Jensen's Alpha (1968):</strong> Formally quantifies manager skill as excess return above the risk-adjusted CAPM expectation. The cornerstone metric for distinguishing skill from systematic risk exposure.</li>
+    <li><strong>Performance Persistence — Grinblatt &amp; Titman (1992), Carhart (1997):</strong> Established rolling-window analysis as the statistically robust method for evaluating fund consistency across market cycles, as opposed to point-to-point CAGR comparisons.</li>
+  </ul>
+
+  <h2>2.3 Comparative Analysis and Research Gaps</h2>
+  <p>A critical review of the literature and existing Indian MF evaluation tools identifies four specific research gaps that this project addresses:</p>
+
+  <h3>Gap 1 — BHB Attribution absent from Indian retail MF evaluation</h3>
+  <p>Studies such as Jayadev (1996), Panwar &amp; Madhumathi (2006), and Kumar (2012) evaluate individual fund performance using Sharpe, Treynor, and Jensen metrics but do not decompose portfolio-level active return into allocation versus selection effects. Gupta &amp; Aggarwal (2014) explicitly state: <em>"attribution analysis remains standard for institutional portfolios but is absent from retail advisory frameworks in emerging markets."</em> No Indian retail platform implements BHB attribution. <strong>SmartInvest</strong> fills this gap through the <code>computeBHBAttribution()</code> service.</p>
+
+  <h3>Gap 2 — Single-index benchmarking inadequate for multi-category portfolios</h3>
+  <p>Studies including Sehgal &amp; Jhanwar (2008) and Dhanda, Batra &amp; Bakshi (2012) compare all fund categories — debt, hybrid, equity — against the Nifty 500 or BSE Sensex. This is methodologically incorrect: a debt fund should be benchmarked against a debt index, not an equity index. Gupta &amp; Aggarwal (2014) identify this explicitly as a gap in emerging market research. <strong>SmartInvest</strong> constructs a dynamic blended benchmark weighted by actual portfolio category composition using <code>calculateBlendedBenchmark()</code>.</p>
+
+  <h3>Gap 3 — Rolling return consistency not applied to Indian retail portfolios</h3>
+  <p>Grinblatt &amp; Titman (1992) and Carhart (1997) established that rolling window analysis provides statistically robust performance evaluation compared to single point-to-point CAGR. Shanmugham &amp; Zabiulla (2011) note that <em>"consistency of outperformance across market cycles remains understudied in the Indian context."</em> Cuthbertson, Nitzsche &amp; O'Sullivan (2016) observe that <em>"rolling-window Information Ratio is established for institutional evaluation but absent from retail advisory tools."</em> <strong>SmartInvest</strong> implements <code>computeRollingConsistency()</code>, computing proper IR from sliding windows over real NAV data.</p>
+
+  <h3>Gap 4 — ML-based fund scoring not validated through attribution</h3>
+  <p>Cao, Chen &amp; Liang (2019) demonstrate that ML models predict individual fund returns with meaningful accuracy but state: <em>"no framework exists that links ML-selected portfolios to portfolio-level attribution effects."</em> Bussmann et al. (2021) identify the gap between SHAP explanations at the individual asset level and portfolio-level attribution. <strong>SmartInvest</strong> bridges this gap: SHAP values explain why individual funds scored highly, and BHB selection effect confirms whether those funds actually beat their category benchmarks in practice.</p>
+
+  <table class="report-table">
+    <tr>
+      <th>Research Gap</th>
+      <th>Supporting Citation</th>
+      <th>This System's Response</th>
+    </tr>
+    <tr>
+      <td>BHB attribution absent from Indian retail tools</td>
+      <td>Jayadev (1996); Gupta &amp; Aggarwal (2014)</td>
+      <td>computeBHBAttribution() per portfolio bucket</td>
+    </tr>
+    <tr>
+      <td>Single equity index used as benchmark for all categories</td>
+      <td>Sehgal &amp; Jhanwar (2008); Dhanda et al. (2012)</td>
+      <td>Dynamic blended benchmark weighted by portfolio composition</td>
+    </tr>
+    <tr>
+      <td>Rolling IR not applied to Indian retail portfolios</td>
+      <td>Cuthbertson et al. (2016); Shanmugham &amp; Zabiulla (2011)</td>
+      <td>computeRollingConsistency() on real NAV history</td>
+    </tr>
+    <tr>
+      <td>ML fund scoring not validated via attribution</td>
+      <td>Cao et al. (2019); Bussmann et al. (2021)</td>
+      <td>SHAP per-fund → BHB selection effect chain</td>
+    </tr>
+  </table>
+  <p class="table-caption">Table 2: Research Gaps and System Response</p>
+
+  <table class="report-table">
+    <tr>
+      <th>Feature</th>
+      <th>Existing Platforms / Research</th>
+      <th>SmartInvest (This Project)</th>
+    </tr>
+    <tr>
+      <td>Fund Selection Logic</td>
+      <td>Based primarily on trailing returns (CAGR)</td>
+      <td>9-parameter composite score (Alpha, Beta, Sortino, Expense Ratio, etc.)</td>
+    </tr>
+    <tr>
+      <td>Risk Assessment</td>
+      <td>Generic labels (High/Medium/Low)</td>
+      <td>Risk-profile-aware scoring — beta target adjusted per risk level</td>
+    </tr>
+    <tr>
+      <td>Portfolio Construction</td>
+      <td>User manually selects funds</td>
+      <td>Automated bucket strategy with category-level strategic allocation</td>
+    </tr>
+    <tr>
+      <td>Benchmark Comparison</td>
+      <td>Single equity index (Nifty 50 or Nifty 500)</td>
+      <td>Dynamic blended benchmark matched to portfolio category weights</td>
+    </tr>
+    <tr>
+      <td>Performance Attribution</td>
+      <td>Not implemented in any Indian retail tool</td>
+      <td>Full BHB decomposition: allocation + selection + interaction effects</td>
+    </tr>
+    <tr>
+      <td>Consistency Analysis</td>
+      <td>Point-to-point CAGR only</td>
+      <td>Rolling 1Y and 3Y window win-rate and Information Ratio</td>
+    </tr>
+    <tr>
+      <td>Explainability</td>
+      <td>Proprietary "black box" ratings</td>
+      <td>SHAP values per fund linked to portfolio-level attribution</td>
+    </tr>
+  </table>
+  <p class="table-caption">Table 3: Feature &amp; Methodology Comparison</p>
+
+  <table class="report-table">
+    <tr>
+      <th>Publisher / Year</th>
+      <th>Title / Reference</th>
+      <th>Methodology &amp; Relevance</th>
+    </tr>
+    <tr>
+      <td>Journal of Finance, 1952</td>
+      <td>Markowitz – Portfolio Selection</td>
+      <td>MPT foundations; diversification via asset correlation</td>
+    </tr>
+    <tr>
+      <td>Journal of Finance, 1964</td>
+      <td>Sharpe – Capital Asset Prices</td>
+      <td>CAPM; Sharpe Ratio derivation</td>
+    </tr>
+    <tr>
+      <td>Journal of Finance, 1968</td>
+      <td>Jensen – The Performance of Mutual Funds</td>
+      <td>Jensen's Alpha; per-fund manager skill measure</td>
+    </tr>
+    <tr>
+      <td>Journal of Portfolio Management, 1986</td>
+      <td>Brinson, Hood &amp; Beebower – Determinants of Portfolio Performance</td>
+      <td>BHB attribution model; allocation vs. selection decomposition</td>
+    </tr>
+    <tr>
+      <td>Journal of Finance, 1992</td>
+      <td>Grinblatt &amp; Titman – The Persistence of Mutual Fund Performance</td>
+      <td>Rolling window analysis for performance consistency</td>
+    </tr>
+    <tr>
+      <td>Journal of Finance, 1997</td>
+      <td>Carhart – On Persistence in Mutual Fund Performance</td>
+      <td>4-factor model; rolling period robustness</td>
+    </tr>
+    <tr>
+      <td>European Financial Management, 2016</td>
+      <td>Cuthbertson, Nitzsche &amp; O'Sullivan – A Review of Behavioural and Management Effects in Mutual Fund Performance</td>
+      <td>Rolling IR absent from retail tools — explicit gap statement</td>
+    </tr>
+    <tr>
+      <td>Journal of Business Perspective, 2008</td>
+      <td>Sehgal &amp; Jhanwar – Stock Selection Skills and Market Timing in India</td>
+      <td>Indian MF evaluation; single-index benchmarking gap</td>
+    </tr>
+    <tr>
+      <td>Emerging Market Context, 2014</td>
+      <td>Gupta &amp; Aggarwal – Mutual Fund Portfolio Performance Evaluation</td>
+      <td>Attribution analysis absent from Indian emerging market tools</td>
+    </tr>
+    <tr>
+      <td>SSRN, 2019</td>
+      <td>Cao, Chen &amp; Liang – Predicting Mutual Fund Performance with Machine Learning</td>
+      <td>ML fund prediction; gap: no attribution validation of ML-selected portfolios</td>
+    </tr>
+    <tr>
+      <td>Frontiers in Artificial Intelligence, 2021</td>
+      <td>Bussmann et al. – Explainability for Fair ML in Financial Decisions</td>
+      <td>SHAP at individual level; gap: no bridge to portfolio attribution</td>
+    </tr>
+  </table>
+  <p class="table-caption">Table 4: Literature Reference and Methodology Table</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 3: PROBLEM STATEMENT                                            -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 3</div>
+    <div class="chapter-title">PROBLEM STATEMENT</div>
+  </div>
+
+  <p>Novice Indian retail investors face an overwhelming number of mutual fund choices and lack access to transparent, comprehensive, and academically grounded tools for making informed investment decisions. Existing platforms either focus on transaction execution with superficial analysis or provide data-dense interfaces that are not actionable for non-professionals.</p>
+  <p>This leads to sub-optimal investment choices: chasing past returns, ignoring fund costs and manager skill, failing to diversify strategically, and having no mechanism to evaluate whether their portfolio is genuinely outperforming or merely tracking high-beta market exposure.</p>
+
+  <div class="callout">
+    <div class="callout-title">Core Problem</div>
+    No existing Indian retail platform: (1) uses a multi-parameter, risk-adjusted scoring model with correct formulas and real market data; (2) constructs portfolios with a category-appropriate blended benchmark; (3) decomposes portfolio active return into allocation vs. selection effects via BHB attribution; or (4) validates ML-based fund scoring through portfolio-level attribution.
+  </div>
+
+  <p>The problem is to design and develop a web-based system — <strong>SmartInvest</strong> — that provides a holistic solution by:</p>
+  <ol>
+    <li>Assessing an individual's risk appetite, investment horizon, and financial capacity through an intuitive interface.</li>
+    <li>Implementing a robust, transparent 9-parameter composite scoring engine that evaluates funds on risk-adjusted performance, stability, manager skill, and cost-efficiency using mathematically correct formulas and real Nifty 50 market data — not synthetic proxies.</li>
+    <li>Normalizing scores at the category level to prevent cross-category contamination, where high-beta categories would otherwise systematically outscore conservative categories.</li>
+    <li>Automating strategic portfolio construction using a category allocation bucket strategy, with recency-weighted CAGR to reflect current fund performance rather than stale historical averages.</li>
+    <li>Implementing the Brinson-Hood-Beebower (1986) attribution model to decompose portfolio active return into allocation, selection, and interaction effects per category.</li>
+    <li>Computing Jensen's Alpha and rolling-window Information Ratio from real NAV data to provide statistically robust outperformance analysis.</li>
+    <li>Providing SHAP-based per-fund explainability linked to portfolio attribution results, enabling a complete explanation chain from individual fund selection to aggregate portfolio performance.</li>
+    <li>Presenting all analytical results through a clean, interactive, and educational user interface.</li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 4: SYSTEM ANALYSIS                                              -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 4</div>
+    <div class="chapter-title">SYSTEM ANALYSIS</div>
+  </div>
+
+  <h2>4.1 Functional Requirements</h2>
+  <ul>
+    <li><strong>User Input:</strong> The system must accept investment amount, duration (years), and risk appetite (Conservative / Balanced / Aggressive) through a form interface.</li>
+    <li><strong>Risk Classification:</strong> The system shall classify the user into one of three risk profiles and apply appropriate category allocation weights.</li>
+    <li><strong>Data Retrieval:</strong> The system must fetch mutual fund scheme data and NAV history from the mfapi.in API and store results in MongoDB with a 24-hour cache policy.</li>
+    <li><strong>Metric Calculation:</strong> The system shall calculate all 9 financial parameters (Sharpe, Sortino, Treynor, Alpha, Beta, Information Ratio, Standard Deviation, Expense Ratio, Turnover Ratio) for each eligible fund using real Nifty 50 market return data.</li>
+    <li><strong>Fund Scoring:</strong> The system must score and rank funds using the weighted composite model with category-level normalization and risk-profile-aware beta targeting.</li>
+    <li><strong>Portfolio Generation:</strong> The system shall generate up to four portfolio options (Recommended, Conservative Alternative, Balanced Alternative, Aggressive Alternative) per user request.</li>
+    <li><strong>Benchmark Comparison:</strong> The system must compute a dynamic blended benchmark — weighted by actual portfolio category composition — and compare portfolio returns against it across 1Y, 3Y, and 5Y periods.</li>
+    <li><strong>Attribution Analysis:</strong> The system shall compute Jensen's Alpha, rolling-window Information Ratio, and BHB decomposition (allocation, selection, interaction effects per category) for each portfolio option.</li>
+    <li><strong>SHAP Explainability:</strong> The ML microservice must return SHAP values for each fund's scoring metrics, enabling explanation of fund selection to the end user.</li>
+    <li><strong>Visualization:</strong> The system must display portfolio allocation, benchmark comparison charts, attribution decomposition, and rolling consistency charts through interactive components.</li>
+    <li><strong>Portfolio Save:</strong> Authenticated users must be able to save their selected portfolio to a personal portfolio collection in MongoDB.</li>
+  </ul>
+
+  <h2>4.2 Non-Functional Requirements</h2>
+  <ul>
+    <li><strong>Performance:</strong> Portfolio generation API response time should be under 8 seconds including attribution computation. UI should load in under 3 seconds.</li>
+    <li><strong>Usability:</strong> The interface must be intuitive, mobile-responsive, and require no prior financial expertise. Attribution results must include human-readable interpretation strings.</li>
+    <li><strong>Reliability:</strong> The system must handle API failures gracefully — falling back to cached MongoDB data for NAV, and deterministic fallback returns for benchmark computation. Attribution failures must be non-fatal (portfolio generation continues with <code>attribution: null</code>).</li>
+    <li><strong>Security:</strong> JWT-based authentication for portfolio save/load. Standard defenses against XSS and injection attacks. All data transfer over HTTPS in production.</li>
+    <li><strong>Scalability:</strong> Node.js event loop handles concurrent requests efficiently. MongoDB connection pooling supports moderate concurrent users.</li>
+    <li><strong>Maintainability:</strong> Modular service architecture — <code>benchmarkService</code>, <code>attributionService</code>, <code>marketDataService</code>, <code>historicalReturnsService</code> — each independently testable. Version-controlled via Git.</li>
+    <li><strong>Accuracy:</strong> Financial formulas must be mathematically correct — Sortino using MAR threshold over all periods, beta using Bessel's correction, IR annualizing excess return arithmetically, scoring weights summing correctly to 1.0 within each category.</li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 5: SYSTEM DESIGN                                                -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 5</div>
+    <div class="chapter-title">SYSTEM DESIGN</div>
+  </div>
+
+  <h2>5.1 Architectural Model</h2>
+  <p>SmartInvest is designed using a modern, decoupled multi-tier architecture:</p>
+
+  <h3>Frontend (Client Tier)</h3>
+  <p>A Single-Page Application (SPA) built with <strong>React.js</strong>. Responsible for all UI rendering, user interaction, and state management. Communicates with the backend exclusively via RESTful API calls. Renders portfolio allocation, benchmark comparison, attribution decomposition, and rolling consistency charts through interactive visualizations.</p>
+
+  <h3>Backend (Application Tier)</h3>
+  <p>A <strong>Node.js / Express.js</strong> REST API server exposing endpoints for portfolio generation, fund exploration, authentication, and portfolio management. Encapsulates all business logic including:</p>
+  <ul>
+    <li>Real-time and cached NAV data management (<code>navSyncJob</code>, <code>amfiService</code>, <code>mfapi</code>)</li>
+    <li>9-parameter financial computation engine (<code>advancedAnalytics.js</code>, <code>analytics.js</code>)</li>
+    <li>Fund scoring, ranking, and category normalization (<code>buckets-multi.js</code>)</li>
+    <li>Benchmark computation with dynamic blending (<code>benchmarkService.js</code>)</li>
+    <li>Portfolio attribution analysis (<code>attributionService.js</code>)</li>
+    <li>Historical NAV-based return computation (<code>historicalReturnsService.js</code>)</li>
+    <li>Real Nifty 50 market data for beta/alpha computation (<code>marketDataService.js</code>)</li>
+  </ul>
+
+  <h3>ML Microservice</h3>
+  <p>A separate <strong>Python</strong> service (Flask, scikit-learn) running on port 5002. Receives fund metric vectors, computes <strong>SHAP values</strong> using TreeExplainer or KernelExplainer, and returns feature importance scores per fund. Called asynchronously during portfolio generation with a 3-second timeout — failure is non-fatal.</p>
+
+  <h3>Data Tier</h3>
+  <ul>
+    <li><strong>MongoDB:</strong> Primary database storing NAV records (<code>NAV</code>), fund histories (<code>FundHistory</code>), user portfolios (<code>Portfolio</code>), user preferences (<code>Preference</code>), and API response cache (<code>Cache</code>).</li>
+    <li><strong>mfapi.in:</strong> External API for real-time NAV history and fund metadata for all AMFI-registered mutual funds.</li>
+    <li><strong>Benchmark data:</strong> Proxy scheme codes in MongoDB NAV collection used as benchmark proxies for index computation.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-title">Architecture Summary</div>
+    React SPA → Node.js/Express API → MongoDB + mfapi.in + Python ML Service
+    <br>All computation layers are stateless and independently replaceable. Attribution analysis runs as a parallel post-processing step after portfolio generation.
+  </div>
+
+  <h2>5.2 Design Model – UML Diagrams</h2>
+
+  <h3>Use Case Diagram</h3>
+  <img src="diagrams/fig1-use-case.svg" alt="Use Case Diagram" class="diagram-img"/>
+  <p class="figure-caption">Fig. 1: Use Case Diagram — User and Admin interactions with SmartInvest</p>
+
+  <h3>Class Diagram</h3>
+  <img src="diagrams/fig2-class-diagram.svg" alt="Class Diagram" class="diagram-img"/>
+  <p class="figure-caption">Fig. 2: Class Diagram — Backend system static structure</p>
+
+  <h3>Sequence Diagram</h3>
+  <img src="diagrams/fig3-sequence-diagram.svg" alt="Sequence Diagram" class="diagram-img"/>
+  <p class="figure-caption">Fig. 3: Sequence Diagram — Single portfolio generation request lifecycle</p>
+
+  <h2>5.3 Data Flow Diagrams (DFDs)</h2>
+
+  <h3>Level 0 — Context Diagram</h3>
+  <img src="diagrams/fig4-dfd-level0.svg" alt="DFD Level 0 Context Diagram" class="diagram-img"/>
+  <p class="figure-caption">Fig. 4: DFD Level 0 — Context diagram</p>
+
+  <h3>Level 1 DFD</h3>
+  <img src="diagrams/fig5-dfd-level1.svg" alt="DFD Level 1" class="diagram-img"/>
+  <p class="figure-caption">Fig. 5: DFD Level 1 — Sub-process decomposition</p>
+</div>
+
+<!-- 5.4 Financial Engine -->
+<div class="page page-break">
+  <h2>5.4 Core Financial Engine: 9-Parameter Analysis Model</h2>
+  <p>This is the intellectual core of the project. A weighted, multi-category composite model provides holistic fund evaluation grounded in established financial theory. <strong>All formulas are implemented with mathematically correct definitions</strong> — corrections were made during development to address flaws identified in earlier iterations.</p>
+
+  <h3>Category A: Risk-Adjusted Performance (45% of total score)</h3>
+  <p>This category answers: <em>"How much return is the fund generating for the amount of risk it is taking?"</em></p>
+
+  <h4>Sharpe Ratio</h4>
+  <p><strong>What it measures:</strong> Return earned in excess of the risk-free rate per unit of total volatility (standard deviation). The most widely used risk-adjusted return metric.</p>
+  <div class="formula-box">Sharpe = (R_annual − R_f) / σ_annual<br>where σ_annual = σ_monthly × √12</div>
+  <p><strong>Good value:</strong> &gt; 1.0 is considered good; &gt; 2.0 is excellent. <strong>Weight within category:</strong> 45%.</p>
+
+  <h4>Sortino Ratio</h4>
+  <p><strong>What it measures:</strong> Like Sharpe, but penalizes only downside volatility (returns below the Minimum Acceptable Return). Does not penalize upside movement.</p>
+  <div class="formula-box">DD = √[ (1/n) × Σ min(r_t − MAR, 0)² ]    (sum over ALL n periods)<br>Sortino = (R_annual − R_f) / (DD × √12)<br>where MAR = R_f / 12 (monthly risk-free rate)</div>
+  <p><strong>Correction note:</strong> Earlier implementations used only negative return periods in the denominator and threshold of zero rather than MAR. This was corrected to use all periods with the proper MAR threshold, giving an accurate measure of downside protection. <strong>Good value:</strong> &gt; 1.5. <strong>Weight within category:</strong> 35%.</p>
+
+  <h4>Treynor Ratio</h4>
+  <p><strong>What it measures:</strong> Return per unit of systematic (market) risk as measured by Beta. Useful for comparing funds exposed to similar market risk levels.</p>
+  <div class="formula-box">Treynor = (R_annual − R_f) / β</div>
+  <p><strong>Good value:</strong> Higher is better; used for relative comparison within category. <strong>Weight within category:</strong> 20%.</p>
+
+  <h3>Category B: Stability &amp; Volatility (25% of total score)</h3>
+  <p>This category answers: <em>"How volatile is the fund and how does it behave relative to the market?"</em></p>
+
+  <h4>Standard Deviation</h4>
+  <p><strong>What it measures:</strong> Total volatility of the fund — how much returns deviate from the fund's own average. Lower is generally better, dependent on category.</p>
+  <div class="formula-box">σ_annual = σ_monthly × √12    (annualized using monthly return series)</div>
+  <p><strong>Weight within category:</strong> 60%.</p>
+
+  <h4>Beta</h4>
+  <p><strong>What it measures:</strong> Sensitivity to market movements relative to Nifty 50. Beta &lt; 1 = less volatile than market; Beta = 1 = tracks market; Beta &gt; 1 = amplifies market movements.</p>
+  <div class="formula-box">β = Cov(R_fund, R_market) / Var(R_market)    (sample covariance, Bessel's correction)</div>
+  <p><strong>Risk-profile-aware scoring:</strong> The "ideal" beta is risk-profile dependent — 0.6 for Conservative, 1.0 for Balanced, 1.3 for Aggressive. The stability score rewards funds whose beta is closest to the user's risk-appropriate target. <strong>Weight within category:</strong> 40%.</p>
+  <p><em>Market returns source:</em> Real Nifty 50 NAV data fetched from the MongoDB NAV collection via <code>marketDataService.getMarketReturns(120)</code>, pre-fetched once per request. Falls back to a deterministic calibrated pattern only when the database is unavailable.</p>
+
+  <h3>Category C: Manager Skill &amp; Consistency (20% of total score)</h3>
+  <p>This category answers: <em>"Is the fund manager adding genuine value above market exposure?"</em></p>
+
+  <h4>Jensen's Alpha (per-fund)</h4>
+  <p><strong>What it measures:</strong> Excess return generated by the fund above what CAPM would predict given its beta. A direct measure of fund manager stock-picking skill.</p>
+  <div class="formula-box">α = R_fund − [R_f + β × (R_market − R_f)]</div>
+  <p><strong>Good value:</strong> Any positive Alpha (&gt; 0) is desirable. <strong>Weight within category:</strong> 60%.</p>
+
+  <h4>Information Ratio (per-fund)</h4>
+  <p><strong>What it measures:</strong> Consistency of outperformance relative to a benchmark — not just magnitude but reliability. Adjusts excess return for the volatility of those excess returns (tracking error).</p>
+  <div class="formula-box">IR = Active Return / Tracking Error<br>= (R_p_annual − R_b_annual) / (TE_monthly × √12)<br>where active return is annualized arithmetically (excess return does not compound geometrically)</div>
+  <p><strong>Good value:</strong> &gt; 0.5 is good; &gt; 1.0 is exceptional. <strong>Weight within category:</strong> 40%.</p>
+
+  <h3>Category D: Cost Efficiency (10% of total score)</h3>
+  <p>This category answers: <em>"How much of my return is consumed by fund operating costs?"</em></p>
+
+  <h4>Expense Ratio</h4>
+  <p>Annual fee charged by the AMC as a percentage of AUM. A guaranteed drag on performance — 1% higher expense ratio = 1% lower return every year. Sourced from SEBI TER category averages (direct plans). <strong>Weight within category:</strong> 60%.</p>
+
+  <h4>Turnover Ratio</h4>
+  <p>Frequency of portfolio rebalancing — higher turnover implies higher hidden transaction costs not captured in the expense ratio. Category-appropriate values applied (index funds: 5%, small-cap: 75%). <strong>Weight within category:</strong> 40%.</p>
+
+  <table class="report-table">
+    <tr>
+      <th>Category</th>
+      <th>Outer Weight</th>
+      <th>Metric</th>
+      <th>Inner Weight</th>
+      <th>Direction</th>
+    </tr>
+    <tr><td rowspan="3"><strong>A. Risk-Adjusted</strong></td><td rowspan="3">45%</td><td>Sharpe Ratio</td><td>45%</td><td>Higher better</td></tr>
+    <tr><td>Sortino Ratio</td><td>35%</td><td>Higher better</td></tr>
+    <tr><td>Treynor Ratio</td><td>20%</td><td>Higher better</td></tr>
+    <tr><td rowspan="2"><strong>B. Stability</strong></td><td rowspan="2">25%</td><td>Standard Deviation</td><td>60%</td><td>Lower better</td></tr>
+    <tr><td>Beta (vs. risk target)</td><td>40%</td><td>Closer to target better</td></tr>
+    <tr><td rowspan="2"><strong>C. Manager Skill</strong></td><td rowspan="2">20%</td><td>Jensen's Alpha</td><td>60%</td><td>Higher better</td></tr>
+    <tr><td>Information Ratio</td><td>40%</td><td>Higher better</td></tr>
+    <tr><td rowspan="2"><strong>D. Cost Efficiency</strong></td><td rowspan="2">10%</td><td>Expense Ratio</td><td>60%</td><td>Lower better</td></tr>
+    <tr><td>Turnover Ratio</td><td>40%</td><td>Lower better</td></tr>
+  </table>
+  <p class="table-caption">Table 5: 9-Parameter Scoring Model — Categories, Weights, and Directionality</p>
+</div>
+
+<!-- 5.5 Scoring Logic -->
+<div class="page page-break">
+  <h2>5.5 Final Scoring and Ranking Logic</h2>
+  <p>To produce a single comparable score for each fund, the system follows a four-step process:</p>
+
+  <h3>Step 1 — Calculate All 9 Metrics</h3>
+  <p>For each fund, all 9 ratios are computed from monthly return series derived from NAV history. A minimum of 12 monthly observations is required; funds with insufficient history are excluded. Beta and Alpha use real Nifty 50 monthly returns pre-fetched from the MongoDB NAV collection.</p>
+
+  <h3>Step 2 — Category-Level Normalization (Key Design Decision)</h3>
+  <p>Each metric is normalized to [0, 1] using Min-Max scaling. <strong>Critically, normalization is performed within each fund category (large-cap, mid-cap, debt, etc.) rather than across all categories.</strong></p>
+
+  <div class="callout">
+    <div class="callout-title">Why Category-Level Normalization Matters</div>
+    If all categories are normalized together, high-beta categories (small-cap, mid-cap) will always outscore conservative categories (debt, liquid) on risk-adjusted metrics during bull markets — not because they are better funds but because of structural category differences. Category-level normalization identifies the <em>best large-cap fund among large-cap funds</em> and the <em>best debt fund among debt funds</em>, then allocates based on the user's risk profile.
+  </div>
+
+  <p>For metrics where higher is better (Sharpe, Sortino, Treynor, Alpha, IR):</p>
+  <div class="formula-box">Normalized = (Value − Min_category) / (Max_category − Min_category)</div>
+  <p>For metrics where lower is better (SD, Expense Ratio, Turnover Ratio):</p>
+  <div class="formula-box">Normalized = 1 − [(Value − Min_category) / (Max_category − Min_category)]</div>
+  <p>An epsilon guard of 1×10⁻¹⁰ prevents range-collapse when all funds in a thin category have near-identical metric values (which would otherwise cause floating-point noise to dominate rankings).</p>
+
+  <h3>Step 3 — Apply Weights and Compute Final Score</h3>
+  <p>Sub-weights within each category sum to 1.0. Outer category weights (0.45, 0.25, 0.20, 0.10) are applied once to yield a final score correctly in the [0, 1] range, scaled to [0, 100].</p>
+  <div class="formula-box">
+riskAdjusted  = (sharpe × 0.45) + (sortino × 0.35) + (treynor × 0.20)   [sum = 1.0]
+stability     = (sd × 0.60) + (beta × 0.40)                              [sum = 1.0]
+managerSkill  = (alpha × 0.60) + (infoRatio × 0.40)                      [sum = 1.0]
+costEfficiency= (expense × 0.60) + (turnover × 0.40)                     [sum = 1.0]
+
+finalScore    = (riskAdjusted × 0.45) + (stability × 0.25) +
+                (managerSkill × 0.20) + (costEfficiency × 0.10)
+
+Score (0–100) = finalScore × 100
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Design Correction: Double-Weighting Bug (Fixed)</div>
+    An earlier version had sub-weights that summed to the outer category weight (e.g., Sharpe×0.20 + Sortino×0.15 + Treynor×0.10 = 0.45), then multiplied by the outer weight again (×0.45), yielding a maximum possible score of 31.5 rather than 100. This has been corrected — sub-weights now sum to 1.0 within each category.
+  </div>
+
+  <h3>Step 4 — Recency-Weighted Expected Return</h3>
+  <p>The expected return used for portfolio projection is computed as a recency-weighted blend of sub-period CAGRs rather than a single long-horizon point-to-point CAGR:</p>
+  <div class="formula-box">R_expected = (R_1Y × 0.50) + (R_3Y × 0.30) + (R_5Y × 0.20)</div>
+  <p>This gives 50% weight to the most recent year's performance, reflecting that recent market conditions are more predictive of near-term returns than a five-year average that may include vastly different market regimes.</p>
+
+  <div class="figure-placeholder" style="text-align:left; padding: 12pt;">
+    <strong>Fig. 6 — Scoring Weight Distribution</strong><br><br>
+    <div class="weight-bar-container">
+      <span class="weight-bar-label">Risk-Adjusted Performance (Sharpe/Sortino/Treynor)</span>
+      <span class="weight-bar-track"><span class="weight-bar-fill" style="width:45%;"></span></span>
+      <span class="weight-bar-pct">45%</span>
+    </div>
+    <div class="weight-bar-container">
+      <span class="weight-bar-label">Stability &amp; Volatility (SD + Beta)</span>
+      <span class="weight-bar-track"><span class="weight-bar-fill" style="width:25%;"></span></span>
+      <span class="weight-bar-pct">25%</span>
+    </div>
+    <div class="weight-bar-container">
+      <span class="weight-bar-label">Manager Skill (Alpha + IR)</span>
+      <span class="weight-bar-track"><span class="weight-bar-fill" style="width:20%;"></span></span>
+      <span class="weight-bar-pct">20%</span>
+    </div>
+    <div class="weight-bar-container">
+      <span class="weight-bar-label">Cost Efficiency (Expense + Turnover)</span>
+      <span class="weight-bar-track"><span class="weight-bar-fill" style="width:10%;"></span></span>
+      <span class="weight-bar-pct">10%</span>
+    </div>
+  </div>
+  <p class="figure-caption">Fig. 6: Composite scoring weight distribution across four evaluation categories</p>
+
+  <h2>5.6 API Integration (mfapi.in)</h2>
+  <p>The system uses the free mfapi.in API as its primary mutual fund data source. Key endpoints:</p>
+  <ul>
+    <li><code>GET https://api.mfapi.in/mf</code> — Complete list of all AMFI-registered schemes with <code>schemeCode</code> and <code>schemeName</code>.</li>
+    <li><code>GET https://api.mfapi.in/mf/{schemeCode}</code> — Full NAV time-series for a specific scheme, including metadata (scheme_category, fund_house) and daily NAV history used for all metric computation.</li>
+  </ul>
+  <p>An aggressive MongoDB caching strategy stores fetched NAV data. Subsequent requests check the cache first, refreshing only when data is stale (older than 24 hours) or absent. This minimises latency and eliminates redundant API calls during portfolio generation for multiple users.</p>
+
+  <h2>5.7 Diversification &amp; Portfolio Construction Logic</h2>
+  <p>Once funds are scored and ranked, the system constructs a diversified portfolio in two steps:</p>
+
+  <h3>Step 1 — Strategic Asset Allocation (Between Categories)</h3>
+  <p>Total investment is allocated across fund categories based on the user's risk profile:</p>
+  <ul>
+    <li><strong>Conservative:</strong> Debt 40%, Liquid 25%, Balanced 20%, Large-Cap 10%, Index 5%</li>
+    <li><strong>Balanced:</strong> Large-Cap 25%, Flexi-Cap 20%, Balanced 20%, Mid-Cap 15%, Debt 10%, Index 5%, ELSS 5%</li>
+    <li><strong>Aggressive:</strong> Mid-Cap 25%, Small-Cap 20%, Large-Cap 20%, Flexi-Cap 15%, ELSS 10%, Balanced 5%, Index 5%</li>
+  </ul>
+
+  <h3>Step 2 — Tactical Diversification (Within Each Category)</h3>
+  <p>Within each category, the top-ranked funds by composite score are selected. The number of funds per category is dynamically determined by the investment amount:</p>
+  <ul>
+    <li>Below ₹50,000: 3–4 funds total</li>
+    <li>₹50,000–₹2,00,000: 4–6 funds total</li>
+    <li>₹2,00,000–₹10,00,000: 6–8 funds total</li>
+    <li>Above ₹10,00,000: 8–10 funds total</li>
+  </ul>
+  <p>Four portfolio options are generated per request: Recommended (user's chosen risk level), Conservative Alternative, Balanced Alternative, and Aggressive Alternative — allowing users to compare strategies before committing.</p>
+</div>
+
+<!-- 5.8 Attribution Framework -->
+<div class="page page-break">
+  <h2>5.8 Performance Attribution Framework</h2>
+  <p>This is the primary academic research contribution of this project. The attribution framework implements three internationally recognised performance evaluation methods — Jensen's Alpha, Information Ratio via rolling windows, and Brinson-Hood-Beebower decomposition — none of which exist in any current Indian retail investment platform.</p>
+
+  <h3>5.8.1 Jensen's Alpha (Portfolio Level)</h3>
+  <p>Jensen's Alpha at the portfolio level measures whether the portfolio generates excess return above what its systematic risk (beta) would predict. Unlike per-fund alpha, portfolio-level alpha accounts for the blended risk of the entire basket.</p>
+  <div class="formula-box">
+α_portfolio = R_p − [R_f + β_p × (R_m − R_f)]
+
+where:
+  R_p = portfolio annualised return (period-weighted)
+  R_f = 6.5% (India 10-yr G-Sec yield)
+  β_p = Σ (fund_beta × allocation_weight)  [allocation-weighted portfolio beta]
+  R_m = blended benchmark return
+  </div>
+  <p><strong>Interpretation:</strong> α &gt; 0 indicates the portfolio selection model generates returns above what systematic market risk alone would predict — evidence of genuine fund selection value.</p>
+
+  <h3>5.8.2 Information Ratio (Rolling Windows)</h3>
+  <p>The Information Ratio measures the consistency of outperformance. Unlike point-to-point CAGR, rolling-window IR is computed across all historical periods available in the NAV data — following the methodology of Grinblatt &amp; Titman (1992).</p>
+  <div class="formula-box">
+IR = mean(Active Returns) / std(Active Returns)
+   = ΔR_avg / Tracking Error
+
+where Active Return per window = R_portfolio_window − R_benchmark_window
+
+Rolling windows: 1-year and 3-year, stepping monthly
+Benchmark: UTI Nifty 50 Index Fund (scheme 120716) as market proxy
+  </div>
+  <p>Outputs include: <em>Consistency Score</em> (% of windows beating benchmark), <em>Average Alpha</em> (mean active return across all windows), <em>Tracking Error</em> (standard deviation of active returns), and <em>Information Ratio</em>.</p>
+  <p><strong>Interpretation:</strong> IR &gt; 0.5 = good; IR &gt; 1.0 = exceptional. An IR computed from 24–40 rolling windows is statistically far more meaningful than a single 3-year point-to-point comparison.</p>
+
+  <h3>5.8.3 Brinson-Hood-Beebower (BHB) Attribution</h3>
+  <p>BHB attribution decomposes total active portfolio return into three components for each asset category, revealing whether outperformance was driven by allocation decisions or fund selection skill.</p>
+
+  <table class="report-table">
+    <tr>
+      <th>Effect</th>
+      <th>Formula</th>
+      <th>Meaning</th>
+    </tr>
+    <tr>
+      <td><strong>Allocation Effect</strong></td>
+      <td>(W<sub>p,i</sub> − W<sub>b,i</sub>) × (R<sub>b,i</sub> − R<sub>b</sub>)</td>
+      <td>Did overweighting/underweighting categories pay off relative to the total benchmark?</td>
+    </tr>
+    <tr>
+      <td><strong>Selection Effect</strong></td>
+      <td>W<sub>b,i</sub> × (R<sub>p,i</sub> − R<sub>b,i</sub>)</td>
+      <td>Did the chosen funds beat their own category benchmark? This directly validates the scoring model.</td>
+    </tr>
+    <tr>
+      <td><strong>Interaction Effect</strong></td>
+      <td>(W<sub>p,i</sub> − W<sub>b,i</sub>) × (R<sub>p,i</sub> − R<sub>b,i</sub>)</td>
+      <td>Joint impact of both allocation and selection decisions simultaneously.</td>
+    </tr>
+    <tr>
+      <td><strong>Total Active Return</strong></td>
+      <td>Σ (Allocation + Selection + Interaction) over all categories i</td>
+      <td>Complete decomposition of why the portfolio outperforms or underperforms.</td>
+    </tr>
+  </table>
+  <p class="table-caption">Table 6: BHB Attribution Effects — Formula and Interpretation</p>
+
+  <p>Where for each category i: W<sub>p,i</sub> = portfolio weight, W<sub>b,i</sub> = policy benchmark weight (from strategy allocation), R<sub>p,i</sub> = portfolio return in category i (from recency-weighted fund CAGRs), R<sub>b,i</sub> = benchmark return for category i (from <code>fetchBenchmarkReturns()</code> using NAV data), R<sub>b</sub> = total blended benchmark return.</p>
+
+  <img src="diagrams/fig7-attribution-pipeline.svg" alt="Attribution Analysis Pipeline" class="diagram-img"/>
+  <p class="figure-caption">Fig. 7: Complete attribution analysis pipeline from portfolio inputs to decomposed results</p>
+
+  <h3>5.8.4 SHAP + Attribution Linkage</h3>
+  <p>The ML microservice computes SHAP (SHapley Additive exPlanations) values for each fund's 9-metric vector. SHAP identifies which metrics most strongly influenced each fund's composite score. When combined with BHB selection effect, this creates a complete explanation chain:</p>
+
+  <div class="callout">
+    <div class="callout-title">Research Claim Enabled by This Architecture</div>
+    "Funds ranked highly by the composite scoring model — where SHAP attributes rankings primarily to Sortino Ratio and Jensen's Alpha — exhibit statistically positive BHB selection effect across rolling 3-year windows, indicating that downside risk management and excess return generation are the genuine sources of the model's outperformance."
+  </div>
+
+  <p>This chain — individual fund SHAP → portfolio BHB selection effect — is novel and addresses the gap explicitly identified by Cao et al. (2019) and Bussmann et al. (2021): that ML-based fund selection has not previously been validated through portfolio-level attribution analysis.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 6: PROJECT TIMELINE                                             -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 6</div>
+    <div class="chapter-title">PROJECT TIMELINE</div>
+  </div>
+
+  <h2>6.1 Gantt Chart</h2>
+  <p>The project is planned over a 7-month period from November 2025 to May 2026, divided into seven phases:</p>
+
+  <table class="report-table">
+    <tr>
+      <th>Phase</th>
+      <th>Task</th>
+      <th>Start</th>
+      <th>End</th>
+      <th>Duration</th>
+      <th style="width:120pt;">Progress</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Research, Literature Survey &amp; Planning</td>
+      <td>13-Nov-25</td>
+      <td>05-Dec-25</td>
+      <td>3 Weeks</td>
+      <td><span class="gantt-bar" style="width:80px;background:#28a745;"></span> Done</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Data Collection, API Integration &amp; DB Design</td>
+      <td>06-Dec-25</td>
+      <td>31-Dec-25</td>
+      <td>4 Weeks</td>
+      <td><span class="gantt-bar" style="width:80px;background:#28a745;"></span> Done</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Backend Development — Scoring Engine &amp; Portfolio Logic</td>
+      <td>01-Jan-26</td>
+      <td>31-Jan-26</td>
+      <td>4 Weeks</td>
+      <td><span class="gantt-bar" style="width:80px;background:#28a745;"></span> Done</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Attribution Framework — BHB, Alpha, Rolling IR</td>
+      <td>01-Feb-26</td>
+      <td>15-Mar-26</td>
+      <td>6 Weeks</td>
+      <td><span class="gantt-bar" style="width:80px;background:#28a745;"></span> Done</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>ML Microservice (SHAP) + Frontend Visualizations</td>
+      <td>16-Mar-26</td>
+      <td>15-Apr-26</td>
+      <td>4 Weeks</td>
+      <td><span class="gantt-bar" style="width:80px;background:#28a745;"></span> Done ✓</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Integration, Testing &amp; Performance Optimization</td>
+      <td>16-Apr-26</td>
+      <td>01-May-26</td>
+      <td>2 Weeks</td>
+      <td><span class="gantt-bar" style="width:80px;background:#28a745;"></span> Done ✓</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Documentation, Report Preparation &amp; Finalization</td>
+      <td>02-May-26</td>
+      <td>15-May-26</td>
+      <td>2 Weeks</td>
+      <td><span class="gantt-bar" style="width:80px;background:#28a745;"></span> Done ✓</td>
+    </tr>
+  </table>
+  <p class="table-caption">Table 7: Project Timeline (November 2025 – May 2026)</p>
+
+  <p class="figure-caption">Fig. 8: Gantt Chart — SmartInvest development timeline across 7 phases</p>
+  <img src="diagrams/fig8-gantt-chart.svg" alt="Project Gantt Chart" class="diagram-img"/>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 7: CONCLUSION AND FUTURE SCOPE                                  -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 7</div>
+    <div class="chapter-title">CONCLUSION AND FUTURE SCOPE</div>
+  </div>
+
+  <h2>7.1 Conclusion</h2>
+  <p><strong>SmartInvest</strong> has been successfully designed, developed, and deployed as a comprehensive, academically grounded investment recommendation and portfolio evaluation platform for Indian retail investors. The system makes three distinct contributions beyond the current state of the art in Indian retail investment tools:</p>
+
+  <ol>
+    <li><strong>Correct Multi-Parameter Fund Scoring:</strong> A 9-metric composite scoring engine implementing mathematically correct formulas — corrected Sortino Ratio (MAR threshold, all-periods denominator), category-level normalization preventing cross-category contamination, risk-profile-aware beta targeting, and real Nifty 50 market returns for beta/alpha computation. Recency-weighted CAGR ensures the expected return reflects current market conditions.</li>
+    <li><strong>Dynamic Blended Benchmarking:</strong> Rather than comparing all portfolios against a single equity index, the system constructs a benchmark weighted by the actual category composition of the recommended portfolio — directly addressing the methodological limitation identified in Gupta &amp; Aggarwal (2014) and the Indian MF evaluation literature.</li>
+    <li><strong>Portfolio Attribution Framework:</strong> The first implementation of Brinson-Hood-Beebower attribution, Jensen's Alpha, and rolling-window Information Ratio in an Indian retail investment tool. This framework enables retail investors to understand not just whether their portfolio outperformed, but why — decomposing active return into allocation decisions and fund selection quality.</li>
+  </ol>
+
+  <p>The combination of SHAP-based per-fund explainability with BHB selection effect creates a novel validation chain for ML-driven fund scoring — directly addressing the gap identified by Cao et al. (2019) and Bussmann et al. (2021). The system serves both as a practical utility for retail investors and as a demonstrated proof-of-concept for bridging institutional-grade financial analysis with accessible, transparent retail tooling.</p>
+
+  <h2>7.2 Future Scope</h2>
+
+  <h3>Carhart 4-Factor Model</h3>
+  <p>Extend per-fund alpha computation from CAPM (1-factor) to the Carhart 4-factor model (market, size, value, momentum). Requires factor return data for Indian equities — available from BSE/NSE research portals. This would provide more rigorous fund manager skill isolation by controlling for well-known systematic factors.</p>
+
+  <h3>Statistical Significance Testing of Alpha</h3>
+  <p>Implement t-tests on rolling alpha values to determine whether positive alpha is statistically significant rather than attributable to chance. A portfolio with IR = 0.7 across 36 rolling windows has much stronger statistical support than one computed over 8 windows.</p>
+
+  <h3>Upstox / NSE API for Actual Index Data</h3>
+  <p>Replace proxy mutual funds as benchmark proxies with actual index closing prices from Upstox Market Data API (which provides <code>NSE_INDEX|Nifty 50</code>, <code>NSE_INDEX|Nifty Midcap 150</code>, etc.). This eliminates proxy tracking error from benchmark computation entirely, strengthening the blended benchmark's accuracy.</p>
+
+  <h3>Direct Broker Integration</h3>
+  <p>Integrate with Zerodha Kite or Angel One APIs to allow one-click execution of the recommended portfolio directly from the SmartInvest interface.</p>
+
+  <h3>Portfolio Tracking and Rebalancing Alerts</h3>
+  <p>Add authenticated user portfolio tracking — monitor actual portfolio drift from target allocation and send rebalancing alerts when category weights deviate beyond a threshold (e.g., ±5%).</p>
+
+  <h3>Monte Carlo Simulation</h3>
+  <p>Implement Monte Carlo projection — using historical return distributions and correlations — to replace single deterministic CAGR projections with a probabilistic range (e.g., 10th/50th/90th percentile outcomes), providing a more honest representation of investment risk.</p>
+
+  <h3>Tax Optimization</h3>
+  <p>Incorporate Indian tax laws (LTCG at 12.5% above ₹1.25L, STCG at 20%, Section 80C via ELSS) into the recommendation engine to suggest tax-efficient portfolio structures.</p>
+
+  <h3>Expansion to ETFs and Direct Equity</h3>
+  <p>Extend beyond mutual funds to include Exchange Traded Funds, REITs, and a curated universe of direct equity instruments for comprehensive multi-asset portfolio construction.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 8: REFERENCES                                                   -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="page page-break">
+  <div class="chapter-heading">
+    <div class="chapter-number">CHAPTER 8</div>
+    <div class="chapter-title">REFERENCES</div>
+  </div>
+
+  <div class="reference-item">
+    [1] Markowitz, H. (1952). <em>Portfolio Selection.</em> The Journal of Finance, 7(1), 77–91.
+  </div>
+  <div class="reference-item">
+    [2] Sharpe, W. F. (1964). Capital Asset Prices: A Theory of Market Equilibrium under Conditions of Risk. <em>The Journal of Finance,</em> 19(3), 425–442.
+  </div>
+  <div class="reference-item">
+    [3] Jensen, M. C. (1968). The Performance of Mutual Funds in the Period 1945–1964. <em>The Journal of Finance,</em> 23(2), 389–416.
+  </div>
+  <div class="reference-item">
+    [4] Brinson, G. P., Hood, L. R., &amp; Beebower, G. L. (1986). Determinants of Portfolio Performance. <em>Financial Analysts Journal,</em> 42(4), 39–44.
+  </div>
+  <div class="reference-item">
+    [5] Brinson, G. P., Singer, B. D., &amp; Beebower, G. L. (1991). Determinants of Portfolio Performance II: An Update. <em>Financial Analysts Journal,</em> 47(3), 40–48.
+  </div>
+  <div class="reference-item">
+    [6] Grinblatt, M., &amp; Titman, S. (1992). The Persistence of Mutual Fund Performance. <em>The Journal of Finance,</em> 47(5), 1977–1984.
+  </div>
+  <div class="reference-item">
+    [7] Carhart, M. M. (1997). On Persistence in Mutual Fund Performance. <em>The Journal of Finance,</em> 52(1), 57–82.
+  </div>
+  <div class="reference-item">
+    [8] Sortino, F. A., &amp; van der Meer, R. (1991). Downside Risk. <em>Journal of Portfolio Management,</em> 17(4), 27–31.
+  </div>
+  <div class="reference-item">
+    [9] Jayadev, M. (1996). Mutual Fund Performance: An Analysis of Monthly Returns. <em>Finance India,</em> 10(1), 73–84.
+  </div>
+  <div class="reference-item">
+    [10] Panwar, S., &amp; Madhumathi, R. (2006). Characteristics and Performance Evaluation of Selected Mutual Funds in India. <em>IIMB Working Paper.</em>
+  </div>
+  <div class="reference-item">
+    [11] Sehgal, S., &amp; Jhanwar, M. (2008). On Stock Selection Skills and Market Timing Abilities of Mutual Fund Managers in India. <em>Journal of Business Perspective,</em> 12(2), 1–14.
+  </div>
+  <div class="reference-item">
+    [12] Shanmugham, R., &amp; Zabiulla, M. (2011). Stock Selection Strategies of Equity Mutual Fund Managers in India. <em>International Research Journal of Finance and Economics,</em> 66.
+  </div>
+  <div class="reference-item">
+    [13] Kumar, A. (2012). Performance Evaluation of Open Ended Schemes of Mutual Funds. <em>International Journal of Business and Social Science (IJBSS),</em> 3(7).
+  </div>
+  <div class="reference-item">
+    [14] Dhanda, S. K., Batra, G. S., &amp; Bakshi, R. K. (2012). Performance Evaluation of Selected Open Ended Mutual Funds in India. <em>International Journal of Marketing, Financial Services &amp; Management Research,</em> 1(1).
+  </div>
+  <div class="reference-item">
+    [15] Gupta, M., &amp; Aggarwal, N. (2014). Mutual Fund Portfolio Performance Evaluation: Emerging Market Context. Retrieved from academic databases.
+  </div>
+  <div class="reference-item">
+    [16] Cuthbertson, K., Nitzsche, D., &amp; O'Sullivan, N. (2016). A Review of Behavioural and Management Effects in Mutual Fund Performance. <em>European Financial Management,</em> 22(4), 554–594.
+  </div>
+  <div class="reference-item">
+    [17] Goodwin, T. H. (1998). The Information Ratio. <em>Financial Analysts Journal,</em> 54(4), 34–43.
+  </div>
+  <div class="reference-item">
+    [18] Cao, C., Chen, Y., &amp; Liang, B. (2019). Predicting Mutual Fund Performance with Machine Learning. <em>SSRN Working Paper.</em>
+  </div>
+  <div class="reference-item">
+    [19] Bussmann, N., Giudici, P., Marinelli, D., &amp; Papenbrock, J. (2021). Explainability for Fair Machine Learning in Credit Scoring and Financial Decisions. <em>Frontiers in Artificial Intelligence,</em> 4, 39.
+  </div>
+  <div class="reference-item">
+    [20] Fisch, J. E., Labouré, M., &amp; Turner, J. A. (2019). The Emergence of the Robo-advisor. In <em>The Disruptive Impact of FinTech on Retirement Systems</em> (pp. 13–37). Oxford University Press.
+  </div>
+  <div class="reference-item">
+    [21] Association of Mutual Funds in India (AMFI). Scheme Categorization and Rationalization Circular. Retrieved from https://www.amfiindia.com/
+  </div>
+  <div class="reference-item">
+    [22] Securities and Exchange Board of India (SEBI). Circular on Total Expense Ratio (TER) for Mutual Fund Schemes. SEBI/HO/IMD/DF2/CIR/P/2018/137.
+  </div>
+  <div class="reference-item">
+    [23] mfapi.in API Documentation. Retrieved from https://www.mfapi.in/
+  </div>
+  <div class="reference-item">
+    [24] National Stock Exchange of India (NSE). Historical Index Data for Nifty 50, Nifty Midcap 150, Nifty Smallcap 250. Retrieved from https://www.nseindia.com/
+  </div>
+  <div class="reference-item">
+    [25] Lundberg, S. M., &amp; Lee, S. I. (2017). A Unified Approach to Interpreting Model Predictions. <em>Advances in Neural Information Processing Systems (NeurIPS),</em> 30.
+  </div>
+  <div class="reference-item">
+    [26] Treynor, J. L. (1965). How to Rate Management of Investment Funds. <em>Harvard Business Review,</em> 43(1), 63–75.
+  </div>
+</div>
+
+<!-- Clean up temp file note -->
+<div class="page page-break">
+  <div style="text-align:center; margin-top:60pt; color:#888; font-style:italic; font-size:11pt;">
+    — End of Synopsis Report —<br><br>
+    SmartInvest: AI-Powered Investment Recommendation System<br>
+    Amity School of Engineering and Technology, Amity University Mumbai<br>
+    Academic Year 2025–26
+  </div>
+</div>
+
+</body>
+</html>

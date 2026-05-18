@@ -1,0 +1,105 @@
+<svg width="680" height="300" viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" font-family="Arial,Helvetica,sans-serif">
+
+  <text x="340" y="18" text-anchor="middle" font-size="13" font-weight="bold" fill="#111">Project Gantt Chart — SmartInvest (Nov 2025 – May 2026)</text>
+  <text x="340" y="32" text-anchor="middle" font-size="9.5" fill="#28a745">All phases completed ✓</text>
+
+  <!-- Grid setup:
+       Label col: 0–195
+       Chart area: 195–670  (475px for 7 months)
+       Each month ≈ 67.8px
+       Nov=0, Dec=67.8, Jan=135.7, Feb=203.6, Mar=271.4, Apr=339.3, May=407.1 (to 475)
+  -->
+
+  <!-- Month headers -->
+  <rect x="195" y="40" width="475" height="20" fill="#2c5f8a"/>
+  <!-- Month dividers and labels -->
+  <!-- Nov: 195 to 262.8 -->
+  <text x="228" y="55" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">Nov '25</text>
+  <line x1="262" y1="40" x2="262" y2="260" stroke="#ddd" stroke-width="0.7"/>
+  <!-- Dec: 262.8 to 330.6 -->
+  <text x="296" y="55" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">Dec '25</text>
+  <line x1="330" y1="40" x2="330" y2="260" stroke="#ddd" stroke-width="0.7"/>
+  <!-- Jan: 330.6 to 398.4 -->
+  <text x="364" y="55" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">Jan '26</text>
+  <line x1="398" y1="40" x2="398" y2="260" stroke="#ddd" stroke-width="0.7"/>
+  <!-- Feb: 398.4 to 466.2 -->
+  <text x="432" y="55" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">Feb '26</text>
+  <line x1="466" y1="40" x2="466" y2="260" stroke="#ddd" stroke-width="0.7"/>
+  <!-- Mar: 466.2 to 534 -->
+  <text x="500" y="55" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">Mar '26</text>
+  <line x1="534" y1="40" x2="534" y2="260" stroke="#ddd" stroke-width="0.7"/>
+  <!-- Apr: 534 to 601.8 -->
+  <text x="568" y="55" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">Apr '26</text>
+  <line x1="602" y1="40" x2="602" y2="260" stroke="#ddd" stroke-width="0.7"/>
+  <!-- May: 601.8 to 670 -->
+  <text x="636" y="55" text-anchor="middle" font-size="9.5" fill="white" font-weight="bold">May '26</text>
+
+  <!-- Row height = 28, start y = 65 -->
+  <!-- Phase rows: alternating background -->
+  <rect x="0" y="63" width="670" height="28" fill="#f9f9f9"/>
+  <rect x="0" y="91" width="670" height="28" fill="white"/>
+  <rect x="0" y="119" width="670" height="28" fill="#f9f9f9"/>
+  <rect x="0" y="147" width="670" height="28" fill="white"/>
+  <rect x="0" y="175" width="670" height="28" fill="#f9f9f9"/>
+  <rect x="0" y="203" width="670" height="28" fill="white"/>
+  <rect x="0" y="231" width="670" height="28" fill="#f9f9f9"/>
+
+  <!-- Phase labels (left column) -->
+  <text x="8"  y="82"  font-size="8.5" fill="#111" font-weight="bold">P1 – Research &amp; Planning</text>
+  <text x="8"  y="110" font-size="8.5" fill="#111" font-weight="bold">P2 – Data Collection &amp; API</text>
+  <text x="8"  y="138" font-size="8.5" fill="#111" font-weight="bold">P3 – Backend Scoring Engine</text>
+  <text x="8"  y="166" font-size="8.5" fill="#111" font-weight="bold">P4 – Attribution Framework</text>
+  <text x="8"  y="194" font-size="8.5" fill="#111" font-weight="bold">P5 – ML Service + Frontend</text>
+  <text x="8"  y="222" font-size="8.5" fill="#111" font-weight="bold">P6 – Integration &amp; Testing</text>
+  <text x="8"  y="250" font-size="8.5" fill="#111" font-weight="bold">P7 – Documentation &amp; Final</text>
+
+  <!-- Gantt bars: all green (completed)
+       Bar formula: x = 195 + (startDay/dayTotal)*475
+       Total days Nov 13 to May 15 = ~183 days
+       Pixel per day = 475/183 ≈ 2.596
+
+       P1: Nov 13 – Dec 5 = day 0–22 → x=195, w=57
+       P2: Dec 6 – Dec 31 = day 23–48 → x=255, w=65
+       P3: Jan 1 – Jan 31 = day 49–79 → x=322, w=78
+       P4: Feb 1 – Mar 15 = day 80–122 → x=403, w=109
+       P5: Mar 16 – Apr 15 = day 123–153 → x=514, w=78
+       P6: Apr 16 – May 1 = day 154–168 → x=595, w=37
+       P7: May 2 – May 15 = day 169–183 → x=634, w=37
+  -->
+
+  <!-- P1: Research & Planning — Nov 13 to Dec 5 (3 weeks) -->
+  <rect x="195" y="68" width="64" height="18" rx="3" fill="#28a745"/>
+  <text x="198" y="81" font-size="8" fill="white">13 Nov – 5 Dec ✓</text>
+
+  <!-- P2: Data Collection — Dec 6 to Dec 31 (4 weeks) -->
+  <rect x="260" y="96" width="67" height="18" rx="3" fill="#28a745"/>
+  <text x="263" y="109" font-size="8" fill="white">6 Dec – 31 Dec ✓</text>
+
+  <!-- P3: Backend — Jan 1 to Jan 31 (4 weeks) -->
+  <rect x="329" y="124" width="68" height="18" rx="3" fill="#28a745"/>
+  <text x="332" y="137" font-size="8" fill="white">1 Jan – 31 Jan ✓</text>
+
+  <!-- P4: Attribution — Feb 1 to Mar 15 (6 weeks) -->
+  <rect x="399" y="152" width="102" height="18" rx="3" fill="#28a745"/>
+  <text x="402" y="165" font-size="8" fill="white">1 Feb – 15 Mar ✓</text>
+
+  <!-- P5: ML + Frontend — Mar 16 to Apr 15 (4 weeks) -->
+  <rect x="503" y="180" width="67" height="18" rx="3" fill="#28a745"/>
+  <text x="506" y="193" font-size="8" fill="white">16 Mar – 15 Apr ✓</text>
+
+  <!-- P6: Integration — Apr 16 to May 1 (2 weeks) -->
+  <rect x="572" y="208" width="34" height="18" rx="3" fill="#28a745"/>
+  <text x="575" y="221" font-size="8" fill="white">16–1 May ✓</text>
+
+  <!-- P7: Documentation — May 2 to May 15 (2 weeks) -->
+  <rect x="608" y="236" width="34" height="18" rx="3" fill="#28a745"/>
+  <text x="611" y="249" font-size="8" fill="white">2–15 May ✓</text>
+
+  <!-- Legend -->
+  <rect x="195" y="268" width="480" height="22" rx="3" fill="#f0f9f0" stroke="#28a745" stroke-width="0.8"/>
+  <rect x="210" y="273" width="20" height="12" rx="2" fill="#28a745"/>
+  <text x="238" y="283" font-size="9" fill="#333">Completed Phase</text>
+  <text x="450" y="283" text-anchor="middle" font-size="9" fill="#555">Total Duration: 26 weeks (Nov 2025 – May 2026)</text>
+
+  <rect x="1" y="1" width="678" height="298" rx="4" fill="none" stroke="#ccc" stroke-width="1"/>
+</svg>

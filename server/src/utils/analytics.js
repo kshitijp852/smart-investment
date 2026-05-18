@@ -77,4 +77,54 @@ function applyExpectedReturnBounds(cagr, category) {
   }
 }
 
-module.exports = { computeReturns, mean, std, cagr, sharpeLike, applyExpectedReturnBounds };
+/**
+ * Recency-weighted CAGR — blends sub-period returns with decaying weights.
+ *
+ * Weights: 1Y = 50%, 3Y = 30%, 5Y = 20%
+ * Rationale: recent performance predicts near-term outcomes better than
+ * a single long-horizon point-to-point CAGR that can be dominated by
+ * a single strong or weak period from years ago.
+ *
+ * Falls back gracefully:
+ *   Only 1Y + 3Y available → 60/40 blend
+ *   Only 1Y available      → use 1Y CAGR
+ *   None available          → overall CAGR (original behaviour)
+ *
+ * @param {Array} history - [{date, close}] sorted chronologically
+ * @returns {number}
+ */
+function recencyWeightedCAGR(history) {
+  if (!history || history.length < 2) return 0;
+
+  const sorted     = [...history].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const latest     = sorted[sorted.length - 1];
+  const latestDate = new Date(latest.date);
+  const latestNav  = latest.close ?? latest.nav ?? 0;
+  if (latestNav === 0) return 0;
+
+  const findAt = (daysBack) => {
+    const target = new Date(latestDate);
+    target.setDate(target.getDate() - daysBack);
+    for (let i = sorted.length - 1; i >= 0; i--) {
+      if (new Date(sorted[i].date) <= target) return sorted[i];
+    }
+    return null;
+  };
+
+  const rec1Y = findAt(365);
+  const rec3Y = findAt(1095);
+  const rec5Y = findAt(1825);
+
+  const nav = (r) => r?.close ?? r?.nav ?? 0;
+
+  const r1Y = rec1Y && nav(rec1Y) > 0 ? (latestNav / nav(rec1Y)) - 1 : null;
+  const r3Y = rec3Y && nav(rec3Y) > 0 ? Math.pow(latestNav / nav(rec3Y), 1 / 3) - 1 : null;
+  const r5Y = rec5Y && nav(rec5Y) > 0 ? Math.pow(latestNav / nav(rec5Y), 1 / 5) - 1 : null;
+
+  if (r1Y !== null && r3Y !== null && r5Y !== null) return r1Y * 0.50 + r3Y * 0.30 + r5Y * 0.20;
+  if (r1Y !== null && r3Y !== null)                 return r1Y * 0.60 + r3Y * 0.40;
+  if (r1Y !== null)                                  return r1Y;
+  return cagr(history);
+}
+
+module.exports = { computeReturns, mean, std, cagr, recencyWeightedCAGR, sharpeLike, applyExpectedReturnBounds };

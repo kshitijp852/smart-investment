@@ -1,217 +1,275 @@
 // Advanced Financial Analytics - Professional Fund Evaluation
-// Implements Sharpe, Sortino, Treynor, Alpha, Beta, Information Ratio, etc.
 
-const { mean, std, computeReturns } = require('./analytics');
+const { mean, std } = require('./analytics');
+
+// Minimum monthly observations required for statistically meaningful metrics.
+// Ratios computed on fewer data points are not reliable.
+const MIN_MONTHLY_OBSERVATIONS = 12;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Individual metric functions
+// ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Calculate Sharpe Ratio
- * Measures risk-adjusted return
- * Formula: (Return - RiskFreeRate) / StandardDeviation
+ * Sharpe Ratio — risk-adjusted return relative to total volatility.
+ *   (Rp_annual - Rf) / σ_annual
  */
 function sharpeRatio(returns, riskFreeRate = 0.06) {
-  if (!returns || returns.length < 2) return 0;
+  if (!returns || returns.length < MIN_MONTHLY_OBSERVATIONS) return 0;
   const avgReturn = mean(returns);
-  const stdDev = std(returns);
+  const stdDev    = std(returns);
   if (stdDev === 0) return 0;
-  
   const annualReturn = Math.pow(1 + avgReturn, 12) - 1;
-  const annualStd = stdDev * Math.sqrt(12);
-  
+  const annualStd    = stdDev * Math.sqrt(12);
   return (annualReturn - riskFreeRate) / annualStd;
 }
 
 /**
- * Calculate Sortino Ratio
- * Like Sharpe but only considers downside volatility
- * Formula: (Return - RiskFreeRate) / DownsideDeviation
+ * Sortino Ratio — risk-adjusted return using only downside deviation.
+ *
+ * FIX (was wrong): uses Minimum Acceptable Return (MAR = Rf/12) as threshold,
+ * not zero. Downside variance computed over ALL periods (not just negative ones)
+ * — using only negative periods understates downside deviation and inflates the ratio.
+ *
+ *   DD = sqrt( (1/n) * Σ min(r - MAR, 0)² )    over all n periods
+ *   Sortino = (Rp_annual - Rf) / (DD * √12)
  */
 function sortinoRatio(returns, riskFreeRate = 0.06) {
-  if (!returns || returns.length < 2) return 0;
+  if (!returns || returns.length < MIN_MONTHLY_OBSERVATIONS) return 0;
+  const MAR       = riskFreeRate / 12;
   const avgReturn = mean(returns);
-  
-  // Calculate downside deviation (only negative returns)
-  const downsideReturns = returns.filter(r => r < 0);
-  if (downsideReturns.length === 0) return sharpeRatio(returns, riskFreeRate);
-  
-  const downsideVariance = downsideReturns.reduce((sum, r) => sum + r * r, 0) / downsideReturns.length;
-  const downsideStd = Math.sqrt(downsideVariance);
-  
-  const annualReturn = Math.pow(1 + avgReturn, 12) - 1;
+
+  const downsideVariance = returns.reduce((sum, r) => {
+    const diff = Math.min(r - MAR, 0);
+    return sum + diff * diff;
+  }, 0) / returns.length;           // divide by ALL periods, not just negative
+
+  const downsideStd       = Math.sqrt(downsideVariance);
+  const annualReturn      = Math.pow(1 + avgReturn, 12) - 1;
   const annualDownsideStd = downsideStd * Math.sqrt(12);
-  
-  if (annualDownsideStd === 0) return 0;
+
+  if (annualDownsideStd === 0) return sharpeRatio(returns, riskFreeRate);
   return (annualReturn - riskFreeRate) / annualDownsideStd;
 }
 
 /**
- * Calculate Beta
- * Measures volatility relative to market
- * Formula: Covariance(fund, market) / Variance(market)
+ * Beta — systematic risk relative to market.
+ *   Cov(fund, market) / Var(market)
+ * Uses sample covariance (Bessel's correction) for consistency with std().
  */
 function beta(fundReturns, marketReturns) {
   if (!fundReturns || !marketReturns || fundReturns.length !== marketReturns.length) return 1;
-  if (fundReturns.length < 2) return 1;
-  
-  const fundMean = mean(fundReturns);
+  if (fundReturns.length < MIN_MONTHLY_OBSERVATIONS) return 1;
+
+  const fundMean   = mean(fundReturns);
   const marketMean = mean(marketReturns);
-  
-  let covariance = 0;
-  let marketVariance = 0;
-  
+  let covariance = 0, marketVariance = 0;
+
   for (let i = 0; i < fundReturns.length; i++) {
-    covariance += (fundReturns[i] - fundMean) * (marketReturns[i] - marketMean);
+    covariance    += (fundReturns[i] - fundMean) * (marketReturns[i] - marketMean);
     marketVariance += Math.pow(marketReturns[i] - marketMean, 2);
   }
-  
-  covariance /= fundReturns.length;
-  marketVariance /= fundReturns.length;
-  
+
+  const n = fundReturns.length - 1; // Bessel's correction
+  covariance    /= n;
+  marketVariance /= n;
+
   if (marketVariance === 0) return 1;
   return covariance / marketVariance;
 }
 
 /**
- * Calculate Treynor Ratio
- * Risk-adjusted return using beta
- * Formula: (Return - RiskFreeRate) / Beta
+ * Treynor Ratio — risk-adjusted return per unit of systematic (beta) risk.
+ *   (Rp_annual - Rf) / β
  */
 function treynorRatio(returns, fundBeta, riskFreeRate = 0.06) {
-  if (!returns || returns.length < 2 || fundBeta === 0) return 0;
-  const avgReturn = mean(returns);
-  const annualReturn = Math.pow(1 + avgReturn, 12) - 1;
-  
+  if (!returns || returns.length < MIN_MONTHLY_OBSERVATIONS || fundBeta === 0) return 0;
+  const annualReturn = Math.pow(1 + mean(returns), 12) - 1;
   return (annualReturn - riskFreeRate) / fundBeta;
 }
 
 /**
- * Calculate Alpha (Jensen's Alpha)
- * Excess return over expected return based on CAPM
- * Formula: ActualReturn - [RiskFreeRate + Beta * (MarketReturn - RiskFreeRate)]
+ * Jensen's Alpha (per-fund) — excess return over CAPM expected return.
+ *   α = Rp - [Rf + β × (Rm - Rf)]
  */
 function alpha(fundReturns, marketReturns, fundBeta, riskFreeRate = 0.06) {
-  if (!fundReturns || fundReturns.length < 2) return 0;
-  
-  const fundReturn = Math.pow(1 + mean(fundReturns), 12) - 1;
+  if (!fundReturns || fundReturns.length < MIN_MONTHLY_OBSERVATIONS) return 0;
+  const fundReturn   = Math.pow(1 + mean(fundReturns), 12) - 1;
   const marketReturn = Math.pow(1 + mean(marketReturns), 12) - 1;
-  
-  const expectedReturn = riskFreeRate + fundBeta * (marketReturn - riskFreeRate);
-  return fundReturn - expectedReturn;
+  const expected     = riskFreeRate + fundBeta * (marketReturn - riskFreeRate);
+  return fundReturn - expected;
 }
 
 /**
- * Calculate Information Ratio
- * Measures consistency of outperformance vs benchmark
- * Formula: (FundReturn - BenchmarkReturn) / TrackingError
+ * Information Ratio — consistency of outperformance vs benchmark.
+ *   IR = (Rp_annual - Rb_annual) / TE_annual
+ *   TE = std(excess_returns) * √12
  */
 function informationRatio(fundReturns, benchmarkReturns) {
   if (!fundReturns || !benchmarkReturns || fundReturns.length !== benchmarkReturns.length) return 0;
-  if (fundReturns.length < 2) return 0;
-  
-  // Calculate excess returns
-  const excessReturns = fundReturns.map((fr, i) => fr - benchmarkReturns[i]);
-  const avgExcessReturn = mean(excessReturns);
-  const trackingError = std(excessReturns);
-  
+  if (fundReturns.length < MIN_MONTHLY_OBSERVATIONS) return 0;
+
+  const excessReturns     = fundReturns.map((r, i) => r - benchmarkReturns[i]);
+  const avgExcess         = mean(excessReturns);
+  const trackingError     = std(excessReturns);
   if (trackingError === 0) return 0;
-  
-  const annualExcessReturn = Math.pow(1 + avgExcessReturn, 12) - 1;
-  const annualTrackingError = trackingError * Math.sqrt(12);
-  
-  return annualExcessReturn / annualTrackingError;
+
+  // Annualise excess return arithmetically (excess return does not compound)
+  const annualExcess         = avgExcess * 12;
+  const annualTrackingError  = trackingError * Math.sqrt(12);
+  return annualExcess / annualTrackingError;
 }
 
 /**
- * Calculate Standard Deviation (Volatility)
- * Annualized standard deviation of returns
+ * Standard Deviation — annualised volatility of monthly returns.
  */
 function standardDeviation(returns) {
-  if (!returns || returns.length < 2) return 0;
-  const monthlyStd = std(returns);
-  return monthlyStd * Math.sqrt(12); // Annualized
+  if (!returns || returns.length < MIN_MONTHLY_OBSERVATIONS) return 0;
+  return std(returns) * Math.sqrt(12);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Normalization
+// ─────────────────────────────────────────────────────────────────────────────
+
 /**
- * Normalize value to 0-1 range
+ * Normalize value to [0, 1].
+ * Epsilon guard prevents range-collapse when all values are nearly identical
+ * (e.g., homogeneous fund pool where floating-point noise would dominate).
  */
 function normalize(value, min, max) {
-  if (max === min) return 0.5;
-  return Math.max(0, Math.min(1, (value - min) / (max - min)));
+  const range = max - min;
+  if (range < 1e-10) return 0.5;
+  return Math.max(0, Math.min(1, (value - min) / range));
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Composite fund score
+// ─────────────────────────────────────────────────────────────────────────────
+
 /**
- * Calculate comprehensive fund score (0-100)
- * Based on professional fund evaluation criteria
+ * Calculate composite fund score (0–100).
+ *
+ * FIX 1 — Double-weighting (was: sub-weights summed to category weight, then
+ * multiplied by category weight again → max score was 31.5 not 100):
+ *   Sub-weights now sum to 1.0 within each category. Outer category weights
+ *   (0.45, 0.25, 0.20, 0.10) are applied once, producing a correct 0–1 score.
+ *
+ * FIX 2 — Cross-category normalization (was: all fund categories normalized
+ * together → high-beta categories systematically scored higher):
+ *   When categoryMetrics is provided (≥3 funds), normalization uses
+ *   category-peers only. Falls back to allMetrics for thin categories.
+ *
+ * FIX 3 — Beta target ignores risk profile (was: beta=1 always optimal):
+ *   betaTarget is risk-profile-aware: low=0.6, medium=1.0, high=1.3.
+ *
+ * Scoring categories:
+ *   A) Risk-Adjusted Performance (45%): Sharpe 45%, Sortino 35%, Treynor 20%
+ *   B) Stability & Volatility      (25%): SD 60%, Beta 40%
+ *   C) Manager Skill & Consistency (20%): Alpha 60%, IR 40%
+ *   D) Cost Efficiency             (10%): Expense 60%, Turnover 40%
+ *
+ * @param {Object}   metrics          - Metrics for the fund being scored
+ * @param {Object[]} allMetrics       - Metrics for all funds (global normalization fallback)
+ * @param {Object[]} categoryMetrics  - Metrics for funds in the same category (preferred)
+ * @param {string}   riskProfile      - 'low' | 'medium' | 'high'
+ * @returns {Object}
  */
-function calculateFundScore(metrics, allMetrics) {
-  // Extract min/max for normalization
-  const sharpeValues = allMetrics.map(m => m.sharpeRatio);
-  const sortinoValues = allMetrics.map(m => m.sortinoRatio);
-  const treynorValues = allMetrics.map(m => m.treynorRatio);
-  const alphaValues = allMetrics.map(m => m.alpha);
-  const infoRatioValues = allMetrics.map(m => m.informationRatio);
-  const sdValues = allMetrics.map(m => m.standardDeviation);
-  const betaValues = allMetrics.map(m => m.beta);
-  const expenseValues = allMetrics.map(m => m.expenseRatio);
-  const turnoverValues = allMetrics.map(m => m.turnoverRatio);
-  
-  // Normalize each metric
-  const sharpeNorm = normalize(metrics.sharpeRatio, Math.min(...sharpeValues), Math.max(...sharpeValues));
-  const sortinoNorm = normalize(metrics.sortinoRatio, Math.min(...sortinoValues), Math.max(...sortinoValues));
-  const treynorNorm = normalize(metrics.treynorRatio, Math.min(...treynorValues), Math.max(...treynorValues));
-  const alphaNorm = normalize(metrics.alpha, Math.min(...alphaValues), Math.max(...alphaValues));
-  const infoRatioNorm = normalize(metrics.informationRatio, Math.min(...infoRatioValues), Math.max(...infoRatioValues));
-  
-  // For these, lower is better - so invert
-  const sdNorm = 1 - normalize(metrics.standardDeviation, Math.min(...sdValues), Math.max(...sdValues));
-  const betaNorm = 1 - normalize(Math.abs(metrics.beta - 1), 0, Math.max(...betaValues.map(b => Math.abs(b - 1))));
-  const expenseNorm = 1 - normalize(metrics.expenseRatio, Math.min(...expenseValues), Math.max(...expenseValues));
-  const turnoverNorm = 1 - normalize(metrics.turnoverRatio, Math.min(...turnoverValues), Math.max(...turnoverValues));
-  
-  // A) Risk-Adjusted Performance (45%)
-  const riskAdjustedScore = (sharpeNorm * 0.20) + (sortinoNorm * 0.15) + (treynorNorm * 0.10);
-  
-  // B) Stability & Volatility (25%)
-  const stabilityScore = (sdNorm * 0.15) + (betaNorm * 0.10);
-  
-  // C) Manager Skill & Consistency (20%)
-  const managerSkillScore = (alphaNorm * 0.12) + (infoRatioNorm * 0.08);
-  
-  // D) Cost Efficiency (10%)
-  const costEfficiencyScore = (expenseNorm * 0.06) + (turnoverNorm * 0.04);
-  
-  // Final weighted score (0-1)
-  const finalScore = (riskAdjustedScore * 0.45) + (stabilityScore * 0.25) + 
-                     (managerSkillScore * 0.20) + (costEfficiencyScore * 0.10);
-  
+function calculateFundScore(metrics, allMetrics, categoryMetrics = null, riskProfile = 'medium') {
+  // Use category-level normalization when the pool is large enough to be meaningful
+  const normPool = (categoryMetrics && categoryMetrics.length >= 3)
+    ? categoryMetrics
+    : allMetrics;
+
+  const vals = (key) => normPool.map(m => m[key]);
+
+  const sharpeMin  = Math.min(...vals('sharpeRatio'));
+  const sharpeMax  = Math.max(...vals('sharpeRatio'));
+  const sortinoMin = Math.min(...vals('sortinoRatio'));
+  const sortinoMax = Math.max(...vals('sortinoRatio'));
+  const treynorMin = Math.min(...vals('treynorRatio'));
+  const treynorMax = Math.max(...vals('treynorRatio'));
+  const alphaMin   = Math.min(...vals('alpha'));
+  const alphaMax   = Math.max(...vals('alpha'));
+  const irMin      = Math.min(...vals('informationRatio'));
+  const irMax      = Math.max(...vals('informationRatio'));
+  const sdMin      = Math.min(...vals('standardDeviation'));
+  const sdMax      = Math.max(...vals('standardDeviation'));
+  const expMin     = Math.min(...vals('expenseRatio'));
+  const expMax     = Math.max(...vals('expenseRatio'));
+  const turnMin    = Math.min(...vals('turnoverRatio'));
+  const turnMax    = Math.max(...vals('turnoverRatio'));
+
+  // Higher-is-better metrics
+  const sharpeNorm    = normalize(metrics.sharpeRatio,       sharpeMin,  sharpeMax);
+  const sortinoNorm   = normalize(metrics.sortinoRatio,      sortinoMin, sortinoMax);
+  const treynorNorm   = normalize(metrics.treynorRatio,      treynorMin, treynorMax);
+  const alphaNorm     = normalize(metrics.alpha,             alphaMin,   alphaMax);
+  const infoRatioNorm = normalize(metrics.informationRatio,  irMin,      irMax);
+
+  // Lower-is-better: SD, expense ratio, turnover
+  const sdNorm      = 1 - normalize(metrics.standardDeviation, sdMin,  sdMax);
+  const expenseNorm = 1 - normalize(metrics.expenseRatio,      expMin, expMax);
+  const turnoverNorm= 1 - normalize(metrics.turnoverRatio,     turnMin, turnMax);
+
+  // Beta: risk-profile-aware target (FIX 3)
+  const betaTarget = { low: 0.6, medium: 1.0, high: 1.3 }[riskProfile] ?? 1.0;
+  const betaDevs   = normPool.map(m => Math.abs(m.beta - betaTarget));
+  const betaNorm   = 1 - normalize(Math.abs(metrics.beta - betaTarget), 0, Math.max(...betaDevs) || 1);
+
+  // ── Category scores — sub-weights sum to 1.0 (FIX 1) ──────────────────────
+
+  // A) Risk-Adjusted Performance (45%): 0.45 + 0.35 + 0.20 = 1.00
+  const riskAdjustedScore = (sharpeNorm * 0.45) + (sortinoNorm * 0.35) + (treynorNorm * 0.20);
+
+  // B) Stability & Volatility (25%): 0.60 + 0.40 = 1.00
+  const stabilityScore = (sdNorm * 0.60) + (betaNorm * 0.40);
+
+  // C) Manager Skill & Consistency (20%): 0.60 + 0.40 = 1.00
+  const managerSkillScore = (alphaNorm * 0.60) + (infoRatioNorm * 0.40);
+
+  // D) Cost Efficiency (10%): 0.60 + 0.40 = 1.00
+  const costEfficiencyScore = (expenseNorm * 0.60) + (turnoverNorm * 0.40);
+
+  // Final score — now correctly in 0–1, scaled to 0–100 (FIX 1)
+  const finalScore =
+    (riskAdjustedScore  * 0.45) +
+    (stabilityScore     * 0.25) +
+    (managerSkillScore  * 0.20) +
+    (costEfficiencyScore * 0.10);
+
   return {
-    finalScore: finalScore * 100, // Scale to 0-100
-    riskAdjustedScore: riskAdjustedScore,
-    stabilityScore: stabilityScore,
-    managerSkillScore: managerSkillScore,
-    costEfficiencyScore: costEfficiencyScore,
-    // Normalized components for display
+    finalScore:          finalScore * 100,
+    riskAdjustedScore,
+    stabilityScore,
+    managerSkillScore,
+    costEfficiencyScore,
     normalized: {
-      sharpe: sharpeNorm,
-      sortino: sortinoNorm,
-      treynor: treynorNorm,
-      alpha: alphaNorm,
+      sharpe:    sharpeNorm,
+      sortino:   sortinoNorm,
+      treynor:   treynorNorm,
+      alpha:     alphaNorm,
       infoRatio: infoRatioNorm,
-      sd: sdNorm,
-      beta: betaNorm,
-      expense: expenseNorm,
-      turnover: turnoverNorm
+      sd:        sdNorm,
+      beta:      betaNorm,
+      expense:   expenseNorm,
+      turnover:  turnoverNorm
     }
   };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Market returns helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
 /**
- * Generate deterministic market returns for beta/alpha calculation
- * Uses historically calibrated Nifty 50 monthly returns (~14% annual)
- * NOT random — same values every call for consistent scoring
- * For real-time accuracy, use marketDataService.getMarketReturns() async version
+ * Deterministic Nifty 50 monthly return pattern — last-resort synchronous fallback.
+ * Used only when the async marketDataService is unavailable (e.g., DB offline).
+ * Calibrated to ~14% annual average (2019–2024).
+ *
+ * Prefer marketDataService.getMarketReturns() wherever async calls are possible.
  */
 function generateMarketReturns(length) {
-  // Historically calibrated Nifty 50 monthly returns (2019-2024 average)
   const historicalPattern = [
     0.012, 0.008, -0.005, 0.015, 0.022, -0.018, 0.009, 0.031, -0.012, 0.018,
     0.025, -0.008, 0.014, 0.007, -0.022, 0.019, 0.011, 0.028, -0.015, 0.009,
@@ -220,51 +278,29 @@ function generateMarketReturns(length) {
     -0.019, 0.028, 0.014, -0.003, 0.023, 0.009, 0.016, -0.013, 0.021, 0.007,
     0.018, -0.008, 0.025, 0.012, -0.016, 0.020, 0.014, 0.006, -0.010, 0.022
   ];
-
   const result = [];
-  for (let i = 0; i < length; i++) {
-    result.push(historicalPattern[i % historicalPattern.length]);
-  }
+  for (let i = 0; i < length; i++) result.push(historicalPattern[i % historicalPattern.length]);
   return result;
 }
 
-/**
- * Get category-based expense ratio estimate
- * Based on SEBI TER limits and industry averages (not random)
- * Direct plans are ~0.5-1% cheaper than regular plans
- */
+// ─────────────────────────────────────────────────────────────────────────────
+// Category-based cost estimates (used when per-fund data is unavailable)
+// ─────────────────────────────────────────────────────────────────────────────
+
 function getExpenseRatioForCategory(category) {
-  const expenseMap = {
-    liquid: 0.0020,      // 0.20% — SEBI cap for liquid funds
-    debt: 0.0050,        // 0.50% — typical debt direct plan
-    balanced: 0.0080,    // 0.80% — hybrid direct plan
-    large_cap: 0.0100,   // 1.00% — large cap direct plan
-    index: 0.0020,       // 0.20% — index funds are low cost
-    flexi_cap: 0.0110,   // 1.10% — flexi cap direct plan
-    elss: 0.0110,        // 1.10% — ELSS direct plan
-    mid_cap: 0.0120,     // 1.20% — mid cap direct plan
-    small_cap: 0.0130,   // 1.30% — small cap direct plan
+  const map = {
+    liquid: 0.0020, debt: 0.0050, balanced: 0.0080, large_cap: 0.0100,
+    index: 0.0020, flexi_cap: 0.0110, elss: 0.0110, mid_cap: 0.0120, small_cap: 0.0130
   };
-  return expenseMap[category] || 0.0100;
+  return map[category] || 0.0100;
 }
 
-/**
- * Get category-based turnover ratio estimate
- * Based on typical fund management styles
- */
 function getTurnoverRatioForCategory(category) {
-  const turnoverMap = {
-    liquid: 0.95,        // High — daily rebalancing
-    debt: 0.40,          // Moderate
-    balanced: 0.50,      // Moderate
-    large_cap: 0.35,     // Lower — buy and hold
-    index: 0.05,         // Very low — passive
-    flexi_cap: 0.60,     // Higher — active management
-    elss: 0.45,          // Moderate — 3yr lock-in
-    mid_cap: 0.70,       // Higher — more active
-    small_cap: 0.75,     // Highest — most active
+  const map = {
+    liquid: 0.95, debt: 0.40, balanced: 0.50, large_cap: 0.35,
+    index: 0.05, flexi_cap: 0.60, elss: 0.45, mid_cap: 0.70, small_cap: 0.75
   };
-  return turnoverMap[category] || 0.50;
+  return map[category] || 0.50;
 }
 
 module.exports = {
@@ -279,5 +315,6 @@ module.exports = {
   generateMarketReturns,
   normalize,
   getExpenseRatioForCategory,
-  getTurnoverRatioForCategory
+  getTurnoverRatioForCategory,
+  MIN_MONTHLY_OBSERVATIONS
 };

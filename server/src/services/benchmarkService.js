@@ -2,6 +2,7 @@
 const axios = require('axios');
 const Cache = require('../models/Cache');
 const NAV = require('../models/NAV');
+const { getFallbackReturns } = require('./marketDataService');
 
 // Benchmark mapping for each category
 const BENCHMARK_MAP = {
@@ -36,19 +37,16 @@ const BENCHMARK_SCHEME_CODES = {
   'NIFTY Liquid Index': '119551',     // Same debt proxy
 };
 
-// Fallback returns (used only when NAV data unavailable)
-// Based on actual market data as of Nov 2024
-const FALLBACK_BENCHMARK_RETURNS = {
-  'NIFTY 50 TRI': { '1Y': 0.24, '3Y': 0.16, '5Y': 0.17, 'SI': 0.13 },
-  'NIFTY Midcap 150 TRI': { '1Y': 0.42, '3Y': 0.28, '5Y': 0.25, 'SI': 0.18 },
-  'NIFTY Smallcap 250 TRI': { '1Y': 0.45, '3Y': 0.30, '5Y': 0.27, 'SI': 0.20 },
-  'NIFTY 500 TRI': { '1Y': 0.28, '3Y': 0.19, '5Y': 0.19, 'SI': 0.15 },
-  'NIFTY 200 TRI': { '1Y': 0.26, '3Y': 0.18, '5Y': 0.18, 'SI': 0.14 },
-  'CRISIL Hybrid 35+ TRI': { '1Y': 0.18, '3Y': 0.13, '5Y': 0.12, 'SI': 0.10 },
-  'CRISIL Hybrid 15+ TRI': { '1Y': 0.12, '3Y': 0.10, '5Y': 0.09, 'SI': 0.08 },
-  'NIFTY 10yr G-Sec Index': { '1Y': 0.08, '3Y': 0.06, '5Y': 0.07, 'SI': 0.07 },
-  'NIFTY Liquid Index': { '1Y': 0.07, '3Y': 0.06, '5Y': 0.06, 'SI': 0.06 }
-};
+/**
+ * Compute annualised CAGR from getFallbackReturns() monthly array.
+ * Used when NAV collection lacks sufficient history for a benchmark.
+ */
+function computeCAGRFromFallback(years) {
+  const months = years * 12;
+  const monthly = getFallbackReturns(months);
+  const compound = monthly.reduce((acc, r) => acc * (1 + r), 1);
+  return parseFloat((Math.pow(compound, 1 / years) - 1).toFixed(4));
+}
 
 /**
  * Get benchmark index for a fund category
@@ -58,7 +56,8 @@ function getBenchmarkForCategory(category) {
 }
 
 /**
- * Fetch benchmark returns — uses real NAV data from DB, falls back to hardcoded
+ * Fetch benchmark returns — queries NAV collection via BENCHMARK_SCHEME_CODES.
+ * Falls back to deterministic getFallbackReturns() when NAV history is insufficient.
  */
 async function fetchBenchmarkReturns(benchmarkName) {
   try {
@@ -72,7 +71,6 @@ async function fetchBenchmarkReturns(benchmarkName) {
       }
     }
 
-    // Try to compute real returns from NAV collection
     const schemeCode = BENCHMARK_SCHEME_CODES[benchmarkName];
     let returns = null;
 
@@ -86,7 +84,6 @@ async function fetchBenchmarkReturns(benchmarkName) {
         const calcReturn = (daysBack) => {
           const targetDate = new Date(latestDate);
           targetDate.setDate(targetDate.getDate() - daysBack);
-          // Find closest record at or before target date
           const past = [...records].reverse().find(r => new Date(r.date) <= targetDate);
           if (!past || past.nav === 0) return null;
           const years = daysBack / 365;
@@ -102,8 +99,8 @@ async function fetchBenchmarkReturns(benchmarkName) {
         if (r1Y !== null) {
           returns = {
             '1Y': parseFloat(r1Y.toFixed(4)),
-            '3Y': r3Y !== null ? parseFloat(r3Y.toFixed(4)) : (FALLBACK_BENCHMARK_RETURNS[benchmarkName]?.['3Y'] || 0.12),
-            '5Y': r5Y !== null ? parseFloat(r5Y.toFixed(4)) : (FALLBACK_BENCHMARK_RETURNS[benchmarkName]?.['5Y'] || 0.12),
+            '3Y': r3Y !== null ? parseFloat(r3Y.toFixed(4)) : computeCAGRFromFallback(3),
+            '5Y': r5Y !== null ? parseFloat(r5Y.toFixed(4)) : computeCAGRFromFallback(5),
             'SI': parseFloat(r1Y.toFixed(4)),
             source: 'real_nav'
           };
@@ -111,13 +108,16 @@ async function fetchBenchmarkReturns(benchmarkName) {
       }
     }
 
-    // Fall back to hardcoded if NAV data insufficient
     if (!returns) {
-      returns = FALLBACK_BENCHMARK_RETURNS[benchmarkName] || { '1Y': 0.12, '3Y': 0.11, '5Y': 0.10, 'SI': 0.10 };
-      returns = { ...returns, source: 'fallback' };
+      returns = {
+        '1Y': computeCAGRFromFallback(1),
+        '3Y': computeCAGRFromFallback(3),
+        '5Y': computeCAGRFromFallback(5),
+        'SI': computeCAGRFromFallback(1),
+        source: 'fallback'
+      };
     }
 
-    // Cache result
     await Cache.findOneAndUpdate(
       { key: cacheKey },
       { key: cacheKey, data: returns, timestamp: new Date() },
@@ -127,7 +127,13 @@ async function fetchBenchmarkReturns(benchmarkName) {
     return returns;
   } catch (error) {
     console.error('Error fetching benchmark returns:', error);
-    return FALLBACK_BENCHMARK_RETURNS[benchmarkName] || { '1Y': 0.10, '3Y': 0.10, '5Y': 0.10, 'SI': 0.10 };
+    return {
+      '1Y': computeCAGRFromFallback(1),
+      '3Y': computeCAGRFromFallback(3),
+      '5Y': computeCAGRFromFallback(5),
+      'SI': computeCAGRFromFallback(1),
+      source: 'fallback'
+    };
   }
 }
 
@@ -296,15 +302,6 @@ function generatePerformanceChartData(basketReturn, benchmarkReturn, duration, i
   return chartData;
 }
 
-module.exports = {
-  getBenchmarkForCategory,
-  fetchBenchmarkReturns,
-  calculateBlendedBenchmark,
-  calculateBasketReturns,
-  compareWithBenchmark,
-  generatePerformanceChartData,
-  BENCHMARK_MAP
-};
 
 
 /**
@@ -462,3 +459,4 @@ module.exports = {
   comparePortfolioWithBenchmark,
   BENCHMARK_MAP
 };
+

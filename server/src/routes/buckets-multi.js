@@ -3,7 +3,8 @@ const router = express.Router();
 const axios = require('axios');
 const FinancialData = require('../models/FinancialData');
 const FundHistory = require('../models/FundHistory');
-const { cagr, computeReturns, applyExpectedReturnBounds } = require('../utils/analytics');
+const { cagr, computeReturns, applyExpectedReturnBounds, recencyWeightedCAGR } = require('../utils/analytics');
+const { getMarketReturns, getFallbackReturns } = require('../services/marketDataService');
 const {
   sharpeRatio, sortinoRatio, beta, treynorRatio,
   alpha, informationRatio, standardDeviation,
@@ -16,6 +17,9 @@ const {
 const {
   comparePortfolioWithBenchmarkHistorical
 } = require('../services/historicalReturnsService');
+const {
+  computeFullAttributionReport
+} = require('../services/attributionService');
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5002';
 
@@ -118,62 +122,98 @@ router.post('/generate', async (req, res) => {
       return res.status(404).json({ message: 'No mutual funds available.' });
     }
     
+    // Fetch real Nifty 50 market returns once — used for beta/alpha on all funds.
+    // Fetches up to 120 months; falls back to deterministic pattern if DB/API unavailable.
+    let marketReturnsPool;
+    try {
+      marketReturnsPool = await getMarketReturns(120);
+    } catch (_) {
+      marketReturnsPool = getFallbackReturns(120);
+    }
+
     // Calculate comprehensive metrics for each fund
     const fundsWithMetrics = allFunds.map(fund => {
-      // Use pre-computed metrics if available (FundHistory)
+      // FundHistory path — pre-computed metrics available
       if (fund._precomputedMetrics && fund._precomputedMetrics.sharpeRatio != null) {
         const m = fund._precomputedMetrics;
-        const expectedReturn = m.cagr3Y || m.cagr1Y || getExpectedReturnForCategory(fund.meta?.category);
+        // Recency-weighted CAGR: 1Y=50%, 3Y=30%, 5Y=20%
+        const r1Y = m.cagr1Y || 0;
+        const r3Y = m.cagr3Y || r1Y;
+        const r5Y = m.cagr5Y || r3Y;
+        const recencyReturn = (m.cagr1Y && m.cagr3Y && m.cagr5Y)
+          ? r1Y * 0.50 + r3Y * 0.30 + r5Y * 0.20
+          : (m.cagr1Y && m.cagr3Y)
+          ? r1Y * 0.60 + r3Y * 0.40
+          : r1Y || getExpectedReturnForCategory(fund.meta?.category);
+
         return {
           ...fund,
-          calculatedReturn: applyExpectedReturnBounds(expectedReturn, fund.meta?.category),
+          calculatedReturn: applyExpectedReturnBounds(recencyReturn, fund.meta?.category),
           metrics: {
-            sharpeRatio: m.sharpeRatio || 0,
-            sortinoRatio: m.sortinoRatio || 0,
-            beta: m.beta || 1,
-            treynorRatio: m.treynorRatio || 0,
-            alpha: m.alpha || 0,
-            informationRatio: m.informationRatio || 0,
-            standardDeviation: m.standardDeviation || 0.15,
-            expenseRatio: getExpenseRatioForCategory(fund.meta?.category),
-            turnoverRatio: getTurnoverRatioForCategory(fund.meta?.category)
+            sharpeRatio:       m.sharpeRatio       || 0,
+            sortinoRatio:      m.sortinoRatio       || 0,
+            beta:              m.beta               || 1,
+            treynorRatio:      m.treynorRatio       || 0,
+            alpha:             m.alpha              || 0,
+            informationRatio:  m.informationRatio   || 0,
+            standardDeviation: m.standardDeviation  || 0.15,
+            expenseRatio:      getExpenseRatioForCategory(fund.meta?.category),
+            turnoverRatio:     getTurnoverRatioForCategory(fund.meta?.category)
           }
         };
       }
 
-      // Compute from price history (curated funds path)
+      // Curated funds path — compute from price history
       const priceHistory = fund.priceHistory || [];
       const returns = computeReturns(priceHistory);
       if (!returns || returns.length < 2) return null;
 
-      const marketReturns = generateMarketReturns(returns.length);
-      const fundCAGR = cagr(priceHistory) || 0;
-      const fundBeta = beta(returns, marketReturns);
+      // Slice real market returns to match fund history length
+      const mktLen = returns.length;
+      const marketReturns = marketReturnsPool.length >= mktLen
+        ? marketReturnsPool.slice(-mktLen)
+        : [...getFallbackReturns(mktLen - marketReturnsPool.length), ...marketReturnsPool];
+
+      const fundCAGR  = recencyWeightedCAGR(priceHistory) || cagr(priceHistory) || 0;
+      const fundBeta  = beta(returns, marketReturns);
 
       return {
         ...fund,
         calculatedReturn: applyExpectedReturnBounds(fundCAGR, fund.meta?.category),
         metrics: {
-          sharpeRatio: sharpeRatio(returns),
-          sortinoRatio: sortinoRatio(returns),
-          beta: fundBeta,
-          treynorRatio: treynorRatio(returns, fundBeta),
-          alpha: alpha(returns, marketReturns, fundBeta),
-          informationRatio: informationRatio(returns, marketReturns),
+          sharpeRatio:       sharpeRatio(returns),
+          sortinoRatio:      sortinoRatio(returns),
+          beta:              fundBeta,
+          treynorRatio:      treynorRatio(returns, fundBeta),
+          alpha:             alpha(returns, marketReturns, fundBeta),
+          informationRatio:  informationRatio(returns, marketReturns),
           standardDeviation: standardDeviation(returns),
-          expenseRatio: getExpenseRatioForCategory(fund.meta?.category),
-          turnoverRatio: getTurnoverRatioForCategory(fund.meta?.category)
+          expenseRatio:      getExpenseRatioForCategory(fund.meta?.category),
+          turnoverRatio:     getTurnoverRatioForCategory(fund.meta?.category)
         }
       };
     }).filter(f => f !== null);
-    
-    // Calculate scores for all funds
+
+    // Build per-category metric pools for category-aware normalization.
+    // Prevents cross-category contamination where high-beta categories
+    // (small_cap, mid_cap) systematically outscore conservative categories.
+    const metricsByCategory = {};
+    fundsWithMetrics.forEach(fund => {
+      const cat = fund.meta?.category || 'other';
+      if (!metricsByCategory[cat]) metricsByCategory[cat] = [];
+      metricsByCategory[cat].push(fund.metrics);
+    });
+
     const allMetrics = fundsWithMetrics.map(f => f.metrics);
+
+    // Score each fund using category-level normalization + user risk profile
     const scoredFunds = fundsWithMetrics.map(fund => {
-      const scoreData = calculateFundScore(fund.metrics, allMetrics);
+      const cat            = fund.meta?.category || 'other';
+      const categoryMetrics = metricsByCategory[cat];
+      const scoreData       = calculateFundScore(fund.metrics, allMetrics, categoryMetrics, riskLevel);
       return {
         ...fund,
-        finalScore: scoreData.finalScore,
+        finalScore:    scoreData.finalScore,
         scoreBreakdown: scoreData
       };
     });
@@ -278,9 +318,8 @@ router.post('/generate', async (req, res) => {
         }
       }
       
-      const totalInvestment = bucket.reduce((sum, f) => sum + f.allocation, 0);
       const totalProjectedValue = bucket.reduce((sum, f) => sum + f.projectedValue, 0);
-      const totalGain = totalProjectedValue - totalInvestment;
+      const totalGain = totalProjectedValue - amount;
       
       const categorySummary = {};
       bucket.forEach(fund => {
@@ -297,10 +336,9 @@ router.post('/generate', async (req, res) => {
         fund.explanation = await getShapExplanation(fund.metrics);
       }));
 
-      // Calculate benchmark comparison (async, but we'll handle it)
       let benchmarkComparison = null;
       let chartData = null;
-      
+
       return {
         strategy: {
           name: strategy.name,
@@ -309,8 +347,9 @@ router.post('/generate', async (req, res) => {
           tag: strategy.tag,
           riskLevel: strategyKey
         },
+        policyWeights: strategy.allocation,
         summary: {
-          totalInvestment: totalInvestment,
+          totalInvestment: amount,
           totalProjectedValue: totalProjectedValue,
           totalGain: totalGain,
           overallReturn: totalWeightedReturn,
@@ -431,6 +470,22 @@ router.post('/generate', async (req, res) => {
       }
     }
     
+    // Compute attribution analysis for each bucket option.
+    // Runs after benchmark comparison so benchmark data is already attached.
+    // Failures are non-fatal — option.attribution remains null on error.
+    await Promise.all(bucketOptions.map(async (option) => {
+      try {
+        option.attribution = await computeFullAttributionReport(
+          option.bucket,
+          duration,
+          option.policyWeights
+        );
+      } catch (err) {
+        console.error(`Attribution failed for ${option.label}:`, err.message);
+        option.attribution = null;
+      }
+    }));
+
     res.json({
       generatedAt: new Date(),
       input: { amount, duration, riskLevel },
