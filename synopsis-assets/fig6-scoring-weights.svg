@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" width="640" height="380" preserveAspectRatio="xMidYMid meet" font-family="Times New Roman, serif">
+  
+
+  <rect x="0.5" y="0.5" width="639" height="379" fill="white" stroke="#cccccc" stroke-width="1"></rect>
+
+  
+  <text x="320" y="28" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a1a1a">
+    Composite Score — Category Weight Distribution
+  </text>
+  <text x="320" y="44" text-anchor="middle" font-size="10" fill="#666">
+    Four-pillar evaluation model · Σ = 100%
+  </text>
+
+  
+  
+
+  <line x1="30" y1="335" x2="360" y2="335" stroke="#333" stroke-width="1.2"></line>
+
+  <g font-size="9" fill="#666">
+    <line x1="30" y1="335" x2="30" y2="340" stroke="#666"></line>
+    <line x1="96" y1="335" x2="96" y2="340" stroke="#666"></line>
+    <line x1="162" y1="335" x2="162" y2="340" stroke="#666"></line>
+    <line x1="228" y1="335" x2="228" y2="340" stroke="#666"></line>
+    <line x1="294" y1="335" x2="294" y2="340" stroke="#666"></line>
+    <line x1="360" y1="335" x2="360" y2="340" stroke="#666"></line>
+    <text x="30" y="353" text-anchor="middle">0%</text>
+    <text x="96" y="353" text-anchor="middle">10%</text>
+    <text x="162" y="353" text-anchor="middle">20%</text>
+    <text x="228" y="353" text-anchor="middle">30%</text>
+    <text x="294" y="353" text-anchor="middle">40%</text>
+    <text x="360" y="353" text-anchor="middle">50%</text>
+  </g>
+
+  <g stroke="#ececec" stroke-width="0.6" stroke-dasharray="3,3">
+    <line x1="96" y1="70" x2="96" y2="335"></line>
+    <line x1="162" y1="70" x2="162" y2="335"></line>
+    <line x1="228" y1="70" x2="228" y2="335"></line>
+    <line x1="294" y1="70" x2="294" y2="335"></line>
+  </g>
+
+  <text x="30" y="82" font-size="10.5" font-weight="bold" fill="#1a1a1a">Risk-Adjusted Performance</text>
+  <text x="30" y="95" font-size="9" fill="#777">Sharpe · Sortino · Treynor</text>
+  <rect x="30" y="102" width="297" height="22" fill="#2c5f8a" rx="3"></rect>
+  <text x="332" y="118" font-size="11" font-weight="bold" fill="#2c5f8a">45%</text>
+
+  <text x="30" y="148" font-size="10.5" font-weight="bold" fill="#1a1a1a">Stability &amp; Volatility</text>
+  <text x="30" y="161" font-size="9" fill="#777">Standard Deviation · Beta</text>
+  <rect x="30" y="168" width="165" height="22" fill="#4f8fc0" rx="3"></rect>
+  <text x="200" y="184" font-size="11" font-weight="bold" fill="#4f8fc0">25%</text>
+
+  <text x="30" y="214" font-size="10.5" font-weight="bold" fill="#1a1a1a">Manager Skill</text>
+  <text x="30" y="227" font-size="9" fill="#777">Jensen&#39;s Alpha · Information Ratio</text>
+  <rect x="30" y="234" width="132" height="22" fill="#7eb0d6" rx="3"></rect>
+  <text x="167" y="250" font-size="11" font-weight="bold" fill="#7eb0d6">20%</text>
+
+  <text x="30" y="280" font-size="10.5" font-weight="bold" fill="#1a1a1a">Cost Efficiency</text>
+  <text x="30" y="293" font-size="9" fill="#777">Expense Ratio · Turnover Ratio</text>
+  <rect x="30" y="300" width="66" height="22" fill="#b8d4e8" stroke="#6a9bbf" stroke-width="0.5" rx="3"></rect>
+  <text x="101" y="316" font-size="11" font-weight="bold" fill="#6a9bbf">10%</text>
+
+  
+  
+
+  <g transform="translate(510 200)">
+
+    
+    
+
+    
+    
+    <path d="M 0 -80&#xA;             A 80 80 0 0 1 24.7214 76.0846&#xA;             L 14.2148 43.7487&#xA;             A 46 46 0 0 0 0 -46 Z" fill="#2c5f8a"></path>
+
+    
+    
+    <path d="M 24.7214 76.0846&#xA;             A 80 80 0 0 1 -76.0846 24.7214&#xA;             L -43.7487 14.2148&#xA;             A 46 46 0 0 0 14.2148 43.7487 Z" fill="#4f8fc0"></path>
+
+    
+    
+    <path d="M -76.0846 24.7214&#xA;             A 80 80 0 0 1 -47.0228 -64.7214&#xA;             L -27.0381 -37.2148&#xA;             A 46 46 0 0 0 -43.7487 14.2148 Z" fill="#7eb0d6"></path>
+
+    
+    
+    <path d="M -47.0228 -64.7214&#xA;             A 80 80 0 0 1 0 -80&#xA;             L 0 -46&#xA;             A 46 46 0 0 0 -27.0381 -37.2148 Z" fill="#b8d4e8" stroke="#6a9bbf" stroke-width="0.5"></path>
+
+    
+    <text x="0" y="-2" text-anchor="middle" font-size="10" fill="#666">Composite</text>
+    <text x="0" y="14" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a1a1a">100%</text>
+
+    
+    
+    <text x="100" y="-12" text-anchor="start" font-size="11" font-weight="bold" fill="#2c5f8a">45%</text>
+    <text x="-46" y="97" text-anchor="end" font-size="11" font-weight="bold" fill="#4f8fc0">25%</text>
+    <text x="-96" y="34" text-anchor="end" font-size="11" font-weight="bold" fill="#7eb0d6">20%</text>
+    <text x="-32" y="-95" text-anchor="end" font-size="11" font-weight="bold" fill="#6a9bbf">10%</text>
+  </g>
+
+  
+  <text x="510" y="105" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#1a1a1a">Weight Allocation</text>
+</svg>

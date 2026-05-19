@@ -6,6 +6,8 @@ import Register from './pages/Register';
 import ExploreFunds from './pages/ExploreFunds';
 import Disclaimer from './components/Disclaimer';
 import BenchmarkComparison from './components/BenchmarkComparison';
+import ShapPanel from './components/ShapPanel';
+import AttributionPanel from './components/AttributionPanel';
 import './styles.css';
 
 // API Base URL - uses environment variable or defaults to localhost
@@ -196,28 +198,27 @@ export default function App(){
       <header className="header">
         <div className="header-content">
           <div className="logo">
-            <span className="logo-icon">💎</span>
             <span className="logo-text">SmartInvest</span>
           </div>
           <nav className="nav">
             <button className={view === 'main' ? 'nav-btn active' : 'nav-btn'} onClick={()=>setView('main')}>
-              🏠 Home
+              Home
             </button>
             <button className={view === 'explore' ? 'nav-btn active' : 'nav-btn'} onClick={()=>setView('explore')}>
-              🔍 Explore Funds
+              Explore Funds
             </button>
             {!token ? (
               <>
                 <button className={view === 'login' ? 'nav-btn active' : 'nav-btn'} onClick={()=>setView('login')}>
-                  🔐 Login
+                  Login
                 </button>
                 <button className={view === 'register' ? 'nav-btn active' : 'nav-btn'} onClick={()=>setView('register')}>
-                  ✨ Register
+                  Register
                 </button>
               </>
             ) : (
               <div className="user-menu">
-                <span className="user-name">👤 {userName || 'User'}</span>
+                <span className="user-name">{userName || 'User'}</span>
                 <button className="nav-btn logout" onClick={logout}>Logout</button>
               </div>
             )}
@@ -324,11 +325,11 @@ export default function App(){
 
                 <div className="button-group">
                   <button className="btn-primary" onClick={generate} disabled={loading}>
-                    {loading ? '🔄 Analyzing...' : inputChanged && recs ? '🔄 Update Recommendations' : '🚀 Get Recommendations'}
+                    {loading ? 'Analyzing…' : inputChanged && recs ? 'Update Recommendations' : 'Get Recommendations'}
                   </button>
                   {(recs || inputChanged) && (
                     <button className="btn-reset" onClick={resetChoices} disabled={loading}>
-                      ↺ Reset
+                      Reset
                     </button>
                   )}
                 </div>
@@ -366,7 +367,7 @@ export default function App(){
                         <span className="tab-label">{option.label}</span>
                         <span className="tab-return">{option.summary.annualizedReturn.toFixed(1)}% p.a.</span>
                       </div>
-                      {option.isRecommended && <span className="recommended-badge">⭐ Recommended</span>}
+                      {option.isRecommended && <span className="recommended-badge">Recommended</span>}
                     </button>
                   ))}
                 </div>
@@ -410,24 +411,23 @@ export default function App(){
 
                       {/* Diversification Info */}
                       <div className="diversification-info">
-                        <span className="div-badge">
-                          📊 {currentBucket.diversification.fundCount} Mutual Funds
-                        </span>
-                        <span className="div-badge">
-                          🎯 {currentBucket.diversification.categoryCount} Categories
-                        </span>
-                        <span className="div-badge">
-                          ⚖️ Diversified Portfolio
-                        </span>
+                        <span className="div-badge">{currentBucket.diversification.fundCount} Funds</span>
+                        <span className="div-badge">{currentBucket.diversification.categoryCount} Categories</span>
+                        <span className="div-badge">Diversified</span>
                       </div>
 
                       {/* Benchmark Comparison */}
                       {currentBucket.benchmarkComparison && (
-                        <BenchmarkComparison 
+                        <BenchmarkComparison
                           benchmarkData={currentBucket}
                           chartData={currentBucket.chartData}
                           formatCurrency={formatCurrency}
                         />
+                      )}
+
+                      {/* Attribution (BHB + Alpha + IR) */}
+                      {currentBucket.attribution && (
+                        <AttributionPanel attribution={currentBucket.attribution} />
                       )}
 
                       {/* Bucket Funds */}
@@ -478,7 +478,7 @@ export default function App(){
 
                         {/* Advanced Metrics Toggle */}
                         <details className="fund-details">
-                          <summary className="fund-details-toggle">📊 View Detailed Metrics</summary>
+                          <summary className="fund-details-toggle">View Metrics &amp; SHAP Explanation</summary>
                           <div className="fund-metrics-grid">
                             <div className="metric-item">
                               <span className="metric-name">Final Score</span>
@@ -556,6 +556,9 @@ export default function App(){
                               </div>
                             </div>
                           </div>
+
+                          {/* SHAP per-fund explanation */}
+                          <ShapPanel explanation={fund.explanation} />
                         </details>
                       </div>
                     ))}
@@ -565,10 +568,10 @@ export default function App(){
                       {/* Action Buttons */}
                       <div className="action-buttons">
                         <button className="btn-secondary" onClick={savePortfolio}>
-                          💾 Save This Portfolio
+                          Save This Portfolio
                         </button>
                         <button className="btn-outline" onClick={()=>setRecs(null)}>
-                          🔄 Try Different Options
+                          Try Different Options
                         </button>
                       </div>
                     </>

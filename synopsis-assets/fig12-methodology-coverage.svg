@@ -1,0 +1,121 @@
+<svg width="580" height="365" xmlns="http://www.w3.org/2000/svg" font-family="Times New Roman, serif">
+  <!-- Background -->
+  <rect width="580" height="365" fill="white" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="290" y="22" text-anchor="middle" font-size="11" font-weight="bold" fill="#2c2c2c">Methodology Coverage Score (0 = Absent, 4 = Complete)</text>
+
+  <!-- X scale: 0 at x=235, 4 at x=515 → 1 unit = 70px -->
+  <!-- x=235=0 | x=305=1 | x=375=2 | x=445=3 | x=515=4 -->
+  <!-- X gridlines -->
+  <line x1="235" y1="32" x2="235" y2="315" stroke="#333" stroke-width="1.5"/>
+  <line x1="305" y1="32" x2="305" y2="315" stroke="#e0e0e0" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="375" y1="32" x2="375" y2="315" stroke="#e0e0e0" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="445" y1="32" x2="445" y2="315" stroke="#e0e0e0" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="515" y1="32" x2="515" y2="315" stroke="#2c5f8a" stroke-width="1" stroke-dasharray="5,3" opacity="0.4"/>
+
+  <!-- X labels -->
+  <text x="235" y="328" text-anchor="middle" font-size="10">0</text>
+  <text x="305" y="328" text-anchor="middle" font-size="10">1</text>
+  <text x="375" y="328" text-anchor="middle" font-size="10">2</text>
+  <text x="445" y="328" text-anchor="middle" font-size="10">3</text>
+  <text x="515" y="328" text-anchor="middle" font-size="10">4</text>
+  <text x="375" y="343" text-anchor="middle" font-size="10" fill="#555">Coverage Score (0=Absent  2=Partial  4=Complete)</text>
+
+  <!-- X base line -->
+  <line x1="235" y1="315" x2="520" y2="315" stroke="#333" stroke-width="1.5"/>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- ROW 1: Risk-Adjusted Scoring (y_top=38) -->
+  <!-- 4 bars: SmartInvest(4), Groww(1), Scripbox(2), Research(3) -->
+  <!-- Bar height=8, gap=2 → group height=4*8+3*2=38 → row height=44 -->
+  <text x="228" y="50" text-anchor="end" font-size="10.5" font-weight="bold">Risk-Adjusted</text>
+  <text x="228" y="62" text-anchor="end" font-size="10.5" font-weight="bold">Scoring</text>
+  <!-- SmartInvest: 4→280 -->
+  <rect x="235" y="38" width="280" height="8" fill="#2c5f8a" rx="1"/>
+  <!-- Groww: 1→70 -->
+  <rect x="235" y="49" width="70"  height="8" fill="#e8a838" rx="1"/>
+  <!-- Scripbox: 2→140 -->
+  <rect x="235" y="60" width="140" height="8" fill="#c0392b" rx="1"/>
+  <!-- Research: 3→210 -->
+  <rect x="235" y="71" width="210" height="8" fill="#27ae60" rx="1"/>
+  <!-- Value labels -->
+  <text x="519" y="45" font-size="9" fill="#2c5f8a" font-weight="bold">4</text>
+  <text x="309" y="56" font-size="9" fill="#b8861f" font-weight="bold">1</text>
+  <text x="379" y="67" font-size="9" fill="#922b21" font-weight="bold">2</text>
+  <text x="449" y="78" font-size="9" fill="#1e8449" font-weight="bold">3</text>
+
+  <!-- ROW 2: BHB Attribution (y_top=93) -->
+  <text x="228" y="105" text-anchor="end" font-size="10.5" font-weight="bold">BHB Attribution</text>
+  <text x="228" y="117" text-anchor="end" font-size="10.5" font-weight="bold">Analysis</text>
+  <!-- SmartInvest: 4→280 -->
+  <rect x="235" y="93"  width="280" height="8" fill="#2c5f8a" rx="1"/>
+  <!-- Groww: 0 → thin marker -->
+  <rect x="235" y="104" width="4"   height="8" fill="#e8a838" rx="1"/>
+  <!-- Scripbox: 0 → thin marker -->
+  <rect x="235" y="115" width="4"   height="8" fill="#c0392b" rx="1"/>
+  <!-- Research: 3→210 -->
+  <rect x="235" y="126" width="210" height="8" fill="#27ae60" rx="1"/>
+  <text x="519" y="100" font-size="9" fill="#2c5f8a" font-weight="bold">4</text>
+  <text x="244" y="111" font-size="9" fill="#b8861f">0</text>
+  <text x="244" y="122" font-size="9" fill="#922b21">0</text>
+  <text x="449" y="133" font-size="9" fill="#1e8449" font-weight="bold">3</text>
+
+  <!-- ROW 3: Blended Benchmarking (y_top=148) -->
+  <text x="228" y="160" text-anchor="end" font-size="10.5" font-weight="bold">Blended</text>
+  <text x="228" y="172" text-anchor="end" font-size="10.5" font-weight="bold">Benchmarking</text>
+  <!-- SmartInvest: 4→280 -->
+  <rect x="235" y="148" width="280" height="8" fill="#2c5f8a" rx="1"/>
+  <!-- Groww: 1→70 -->
+  <rect x="235" y="159" width="70"  height="8" fill="#e8a838" rx="1"/>
+  <!-- Scripbox: 1→70 -->
+  <rect x="235" y="170" width="70"  height="8" fill="#c0392b" rx="1"/>
+  <!-- Research: 2→140 -->
+  <rect x="235" y="181" width="140" height="8" fill="#27ae60" rx="1"/>
+  <text x="519" y="155" font-size="9" fill="#2c5f8a" font-weight="bold">4</text>
+  <text x="309" y="166" font-size="9" fill="#b8861f">1</text>
+  <text x="309" y="177" font-size="9" fill="#922b21">1</text>
+  <text x="379" y="188" font-size="9" fill="#1e8449" font-weight="bold">2</text>
+
+  <!-- ROW 4: ML Explainability (y_top=203) -->
+  <text x="228" y="215" text-anchor="end" font-size="10.5" font-weight="bold">ML / SHAP</text>
+  <text x="228" y="227" text-anchor="end" font-size="10.5" font-weight="bold">Explainability</text>
+  <!-- SmartInvest: 4→280 -->
+  <rect x="235" y="203" width="280" height="8" fill="#2c5f8a" rx="1"/>
+  <!-- Groww: 0 -->
+  <rect x="235" y="214" width="4"   height="8" fill="#e8a838" rx="1"/>
+  <!-- Scripbox: 1→70 -->
+  <rect x="235" y="225" width="70"  height="8" fill="#c0392b" rx="1"/>
+  <!-- Research: 2→140 -->
+  <rect x="235" y="236" width="140" height="8" fill="#27ae60" rx="1"/>
+  <text x="519" y="210" font-size="9" fill="#2c5f8a" font-weight="bold">4</text>
+  <text x="244" y="221" font-size="9" fill="#b8861f">0</text>
+  <text x="309" y="232" font-size="9" fill="#922b21">1</text>
+  <text x="379" y="243" font-size="9" fill="#1e8449" font-weight="bold">2</text>
+
+  <!-- ROW 5: Rolling Consistency (y_top=258) -->
+  <text x="228" y="270" text-anchor="end" font-size="10.5" font-weight="bold">Rolling Window</text>
+  <text x="228" y="282" text-anchor="end" font-size="10.5" font-weight="bold">Consistency</text>
+  <!-- SmartInvest: 4→280 -->
+  <rect x="235" y="258" width="280" height="8" fill="#2c5f8a" rx="1"/>
+  <!-- Groww: 1→70 -->
+  <rect x="235" y="269" width="70"  height="8" fill="#e8a838" rx="1"/>
+  <!-- Scripbox: 1→70 -->
+  <rect x="235" y="280" width="70"  height="8" fill="#c0392b" rx="1"/>
+  <!-- Research: 3→210 -->
+  <rect x="235" y="291" width="210" height="8" fill="#27ae60" rx="1"/>
+  <text x="519" y="265" font-size="9" fill="#2c5f8a" font-weight="bold">4</text>
+  <text x="309" y="276" font-size="9" fill="#b8861f">1</text>
+  <text x="309" y="287" font-size="9" fill="#922b21">1</text>
+  <text x="449" y="298" font-size="9" fill="#1e8449" font-weight="bold">3</text>
+
+  <!-- ═══ LEGEND ═══ -->
+  <rect x="60"  y="350" width="10" height="9" fill="#2c5f8a" rx="1"/>
+  <text x="74"  y="358" font-size="9.5">SmartInvest</text>
+  <rect x="160" y="350" width="10" height="9" fill="#e8a838" rx="1"/>
+  <text x="174" y="358" font-size="9.5">Groww / Zerodha</text>
+  <rect x="290" y="350" width="10" height="9" fill="#c0392b" rx="1"/>
+  <text x="304" y="358" font-size="9.5">Scripbox / ET Money</text>
+  <rect x="430" y="350" width="10" height="9" fill="#27ae60" rx="1"/>
+  <text x="444" y="358" font-size="9.5">Research Literature</text>
+</svg>

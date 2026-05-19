@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk 'END{print NR}' project-synopsis-standalone.html)",
+      "Bash(node -e 'require\\('\\\\''@babel/parser'\\\\''\\).parse\\(require\\('\\\\''fs'\\\\''\\).readFileSync\\('\\\\''__TRACKED_VAR__'\\\\'','\\\\''utf8'\\\\''\\),{sourceType:'\\\\''module'\\\\'',plugins:['\\\\''jsx'\\\\'']}\\); console.log\\('\\\\''__TRACKED_VAR__ OK'\\\\''\\)')",
+      "Bash(node *)"
+    ]
+  }
+}

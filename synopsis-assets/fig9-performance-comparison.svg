@@ -1,0 +1,73 @@
+<svg width="560" height="320" xmlns="http://www.w3.org/2000/svg" font-family="Times New Roman, serif">
+  <!-- Background -->
+  <rect width="560" height="320" fill="white" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- Chart area fill -->
+  <rect x="80" y="35" width="440" height="205" fill="#fafafa" stroke="#e0e0e0" stroke-width="0.5"/>
+
+  <!-- Y-axis gridlines (scale 0.0 – 2.0, height=205, 1 unit=102.5px, bottom=240) -->
+  <!-- y=240→0.0 | y=188→0.5 | y=137→1.0 | y=86→1.5 | y=35→2.0 -->
+  <line x1="80" y1="188" x2="520" y2="188" stroke="#e0e0e0" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <line x1="80" y1="137" x2="520" y2="137" stroke="#2c5f8a" stroke-width="1.2" stroke-dasharray="7,3" opacity="0.55"/>
+  <line x1="80" y1="86"  x2="520" y2="86"  stroke="#e0e0e0" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- Axes -->
+  <line x1="80" y1="35"  x2="80"  y2="240" stroke="#333333" stroke-width="1.5"/>
+  <line x1="80" y1="240" x2="520" y2="240" stroke="#333333" stroke-width="1.5"/>
+
+  <!-- Y-axis labels -->
+  <text x="73" y="244" text-anchor="end" font-size="10">0.0</text>
+  <text x="73" y="192" text-anchor="end" font-size="10">0.5</text>
+  <text x="73" y="141" text-anchor="end" font-size="10">1.0</text>
+  <text x="73" y="90"  text-anchor="end" font-size="10">1.5</text>
+  <text x="73" y="39"  text-anchor="end" font-size="10">2.0</text>
+
+  <!-- Good threshold annotation -->
+  <text x="524" y="134" font-size="9" fill="#2c5f8a">Good ≥ 1.0</text>
+
+  <!-- Y-axis title (rotated) -->
+  <text transform="rotate(-90,18,138)" x="0" y="0" text-anchor="middle" font-size="10" fill="#555">Metric Value</text>
+
+  <!-- ═══ GROUP 1: Sharpe Ratio (centre x=163) ═══ -->
+  <!-- SmartInvest 1.42 → h=145.6≈146, y=94 | x=120, w=38 -->
+  <rect x="120" y="94"  width="38" height="146" fill="#2c5f8a" rx="2"/>
+  <!-- Baseline Nifty 0.89 → h=91.2≈91, y=149 | x=166, w=38 -->
+  <rect x="166" y="149" width="38" height="91"  fill="#9ab5cc" rx="2"/>
+  <!-- Value labels -->
+  <text x="139" y="89"  text-anchor="middle" font-size="10" font-weight="bold" fill="#2c5f8a">1.42</text>
+  <text x="185" y="144" text-anchor="middle" font-size="10" fill="#555">0.89</text>
+  <!-- Group label -->
+  <text x="163" y="259" text-anchor="middle" font-size="11" font-weight="bold">Sharpe Ratio</text>
+
+  <!-- ═══ GROUP 2: Sortino Ratio (centre x=300) ═══ -->
+  <!-- SmartInvest 1.87 → h=191.7≈192, y=48 | x=257, w=38 -->
+  <rect x="257" y="48"  width="38" height="192" fill="#2c5f8a" rx="2"/>
+  <!-- Baseline 1.12 → h=114.8≈115, y=125 | x=303, w=38 -->
+  <rect x="303" y="125" width="38" height="115" fill="#9ab5cc" rx="2"/>
+  <!-- Value labels -->
+  <text x="276" y="43"  text-anchor="middle" font-size="10" font-weight="bold" fill="#2c5f8a">1.87</text>
+  <text x="322" y="120" text-anchor="middle" font-size="10" fill="#555">1.12</text>
+  <!-- Group label -->
+  <text x="300" y="259" text-anchor="middle" font-size="11" font-weight="bold">Sortino Ratio</text>
+
+  <!-- ═══ GROUP 3: Information Ratio (centre x=437) ═══ -->
+  <!-- SmartInvest 0.71 → h=72.8≈73, y=167 | x=394, w=38 -->
+  <rect x="394" y="167" width="38" height="73" fill="#2c5f8a" rx="2"/>
+  <!-- Baseline Trailing 0.22 → h=22.6≈23, y=217 | x=440, w=38 -->
+  <rect x="440" y="217" width="38" height="23" fill="#9ab5cc" rx="2"/>
+  <!-- Good IR threshold = 0.5 → y=240-51.25=188.75: already shown by 0.5 gridline -->
+  <!-- Value labels -->
+  <text x="413" y="162" text-anchor="middle" font-size="10" font-weight="bold" fill="#2c5f8a">0.71</text>
+  <text x="459" y="212" text-anchor="middle" font-size="10" fill="#555">0.22</text>
+  <!-- Group label -->
+  <text x="437" y="259" text-anchor="middle" font-size="11" font-weight="bold">Info. Ratio</text>
+
+  <!-- ═══ LEGEND ═══ -->
+  <rect x="110" y="284" width="14" height="12" fill="#2c5f8a" rx="2"/>
+  <text x="129" y="294" font-size="10">SmartInvest Portfolio (Balanced, 3Y)</text>
+  <rect x="330" y="284" width="14" height="12" fill="#9ab5cc" rx="2"/>
+  <text x="349" y="294" font-size="10">Research / Traditional Baseline</text>
+
+  <!-- Baseline footnote -->
+  <text x="280" y="312" text-anchor="middle" font-size="8.5" fill="#777" font-style="italic">Sharpe/Sortino baseline = Nifty 50 (3Y)  |  IR baseline = trailing-returns selection approach  |  IR good threshold ≥ 0.5</text>
+</svg>
